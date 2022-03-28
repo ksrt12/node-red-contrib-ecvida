@@ -1,0 +1,56 @@
+<script type="text/html" data-template-name="ecvida-get">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Имя</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-login"><i class="icon-tag"></i> Ecvida login</label>
+        <input type="text" id="node-input-login" placeholder="Ecvida login">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command_type"><i class="icon-tag"></i> Получить из личного кабинета</label>
+        <select id="node-input-command_type">
+          <option value="counters">Текущие значения счётчиков</option>
+          <option value="acculars">Текущее значение квартплаты</option>
+        </select>
+    </div>
+</script>
+
+
+
+<script type="text/html" data-help-name="ecvida-get">
+    <p>Send voice command or TTS to Yandex Alice speaker</p>
+</script>
+
+
+<script type="text/javascript">
+
+    RED.nodes.registerType('ecvida-get', {
+        category: 'Home',
+        color: '#55ba58',
+        defaults: {
+            name: {
+                value: null,
+                required: false
+            },
+            login: {
+                type: "ecvida-login",
+                required: true
+            },
+            command_type: { value: "counters" }
+        },
+        inputs: 1,
+        outputs: 1,
+        align: 'right',
+        outputLabels: ["debug"],
+        icon: 'ecvida.png',
+        label: function () {
+            return this.name || "ecvida-get";
+        },
+        oneditprepare: function () {
+            let node = this;
+        },
+        oneditsave: function () {
+        }
+    });
+</script>

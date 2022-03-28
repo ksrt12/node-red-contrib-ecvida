@@ -1,0 +1,42 @@
+<script type="text/x-red" data-template-name="ecvida-login">
+<input autocomplete="false" name="hidden" type="text" style="display:none;">
+
+    <div class="form-row">
+        <label for="node-config-input-name" class="l-width"><i class="fa fa-bookmark"></i> Имя</label>
+        <input type="text" id="node-config-input-name" placeholder="Имя">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-username"><i class="fa fa-user"></i> Логин</label>
+        <input type="text" id="node-config-input-username" placeholder="Телефон/e-mail">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-password"><i class="fa fa-globe"></i> Пароль</label>
+        <input type="password" id="node-config-input-password" placeholder="Ваш пароль">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-cookies"><i class="fa fa-globe"></i> Cookies</label>
+        <input type="text" id="node-config-input-cookies" placeholder=".ASPXAUTH=....; .ASPXROLES=....">
+    </div>
+    <div class="form-row">
+        <label for='node-config-input-debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
+        <input type="checkbox" id="node-config-input-debug" style="display: inline-block; width: auto; vertical-align: top;"></input>
+    </div>
+    <br>
+
+</script>
+
+<script type='text/javascript'>
+    RED.nodes.registerType('ecvida-login', {
+        category: 'config',
+        defaults: {
+            name: { value: "Ecvida", required: false },
+            username: { value: null, required: true },
+            password: { value: null, required: true },
+            cookies: { value: "", required: false },
+            debug: { value: false }
+        },
+        label: function () {
+            return this.name || "Ecvida";
+        }
+    });
+</script>

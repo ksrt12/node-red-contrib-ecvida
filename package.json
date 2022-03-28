@@ -1,0 +1,33 @@
+{
+    "name": "node-red-contrib-ecvida",
+    "node-red": {
+        "nodes": {
+            "ecvida-get": "nodes/ecvida-get.js",
+            "ecvida-login": "nodes/ecvida-login.js"
+        }
+    },
+    "keywords": [
+        "node-red",
+        "ecvida"
+    ],
+    "bugs": {
+        "url": "https://github.com/ksrt12/node-red-contrib-ecvida/issues/"
+    },
+    "homepage": "https://github.com/ksrt12/node-red-contrib-ecvida",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ksrt12/node-red-contrib-ecvida.git"
+    },
+    "version": "1.0.0",
+    "description": "ecvida system",
+    "main": "ecvida-iot.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Stepan Kazakov",
+    "license": "GPL",
+    "dependencies": {
+        "jsdom": "^19.0.0",
+        "node-fetch": "^2.6.7"
+    }
+}
