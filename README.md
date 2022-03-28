@@ -18,6 +18,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.1 28/03/22:
+
+-   Write get counters and acculars logic
+
 Version 1.0.0 28/03/22:
 
 -   Init commit

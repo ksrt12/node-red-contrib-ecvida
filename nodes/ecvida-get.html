@@ -8,18 +8,16 @@
         <input type="text" id="node-input-login" placeholder="Ecvida login">
     </div>
     <div class="form-row">
-        <label for="node-input-command_type"><i class="icon-tag"></i> Получить из личного кабинета</label>
+        <label for="node-input-command_type"><i class="icon-tag"></i> Получить</label>
         <select id="node-input-command_type">
-          <option value="counters">Текущие значения счётчиков</option>
-          <option value="acculars">Текущее значение квартплаты</option>
+          <option value="counters">Счётчики</option>
+          <option value="acculars">Кваптплата</option>
         </select>
     </div>
 </script>
 
-
-
 <script type="text/html" data-help-name="ecvida-get">
-    <p>Send voice command or TTS to Yandex Alice speaker</p>
+    <p>Получить текущие значения счётчиков или квартплаты за последний месяц</p>
 </script>
 
 
@@ -29,14 +27,8 @@
         category: 'Home',
         color: '#55ba58',
         defaults: {
-            name: {
-                value: null,
-                required: false
-            },
-            login: {
-                type: "ecvida-login",
-                required: true
-            },
+            name: { value: null, required: false },
+            login: { type: "ecvida-login", required: true },
             command_type: { value: "counters" }
         },
         inputs: 1,
@@ -45,7 +37,7 @@
         outputLabels: ["debug"],
         icon: 'ecvida.png',
         label: function () {
-            return this.name || "ecvida-get";
+            return this.name || this.command_type || "ecvida-get";
         },
         oneditprepare: function () {
             let node = this;
