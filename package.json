@@ -3,6 +3,7 @@
     "node-red": {
         "nodes": {
             "ecvida-get": "nodes/ecvida-get.js",
+            "ecvida-send": "nodes/ecvida-send.js",
             "ecvida-login": "nodes/ecvida-login.js"
         }
     },

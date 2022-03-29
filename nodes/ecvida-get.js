@@ -43,18 +43,18 @@ module.exports = function (RED) {
             };
 
             const formatNumber = str => parseFloat(str.replace(',', '.').replace(new RegExp(/\s/, 'g'), ''));
-            const is = str => (str && str.length > 700);
+            const is = (str, length = 1) => (str && str.length > length);
             const cleanStatus = () => node.status({});
 
             async function make_action() {
 
                 cleanStatus();
 
-                if (!is(cookies)) {
+                if (!is(cookies, 700)) {
                     cookies = await getCookies(username, password, setStatus, SetError, Debug_Log);
                 }
 
-                if (is(cookies)) {
+                if (is(cookies, 700)) {
 
                     let topic = "Get " + command;
                     setStatus("blue", "ring", topic, "begin");

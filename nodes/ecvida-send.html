@@ -1,4 +1,4 @@
-<script type="text/html" data-template-name="ecvida-get">
+<script type="text/html" data-template-name="ecvida-send">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Имя</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -7,29 +7,21 @@
         <label for="node-input-login"><i class="icon-tag"></i> Ecvida login</label>
         <input type="text" id="node-input-login" placeholder="Ecvida login">
     </div>
-    <div class="form-row">
-        <label for="node-input-command_type"><i class="icon-tag"></i> Получить</label>
-        <select id="node-input-command_type">
-          <option value="counters">Счётчики</option>
-          <option value="acculars">Квартплата</option>
-        </select>
-    </div>
 </script>
 
-<script type="text/html" data-help-name="ecvida-get">
-    <p>Получить текущие значения счётчиков или квартплаты за последний месяц</p>
+<script type="text/html" data-help-name="ecvida-send">
+    <p>Отправить текущие значения счётчиков</p>
 </script>
 
 
 <script type="text/javascript">
 
-    RED.nodes.registerType('ecvida-get', {
+    RED.nodes.registerType('ecvida-send', {
         category: 'Home',
         color: '#55ba58',
         defaults: {
             name: { value: null, required: false },
-            login: { type: "ecvida-login", required: true },
-            command_type: { value: "counters" }
+            login: { type: "ecvida-login", required: true }
         },
         inputs: 1,
         outputs: 1,
@@ -37,7 +29,7 @@
         outputLabels: ["debug"],
         icon: 'ecvida.png',
         label: function () {
-            return this.name || this.command_type || "ecvida-get";
+            return this.name || this.command_type || "ecvida-send";
         },
         oneditprepare: function () {
             let node = this;
