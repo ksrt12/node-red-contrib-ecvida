@@ -17,7 +17,7 @@
 <script type="text/javascript">
 
     RED.nodes.registerType('ecvida-send', {
-        category: 'Home',
+        category: 'Ecvida',
         color: '#55ba58',
         defaults: {
             name: { value: null, required: false },
@@ -29,7 +29,7 @@
         outputLabels: ["debug"],
         icon: 'ecvida.png',
         label: function () {
-            return this.name || this.command_type || "ecvida-send";
+            return this.name || "ecvida-send";
         },
         oneditprepare: function () {
             let node = this;
