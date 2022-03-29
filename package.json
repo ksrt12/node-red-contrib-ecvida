@@ -1,11 +1,15 @@
 {
     "name": "node-red-contrib-ecvida",
     "node-red": {
+        "version": ">=2.0.0",
         "nodes": {
             "ecvida-get": "nodes/ecvida-get.js",
             "ecvida-send": "nodes/ecvida-send.js",
             "ecvida-login": "nodes/ecvida-login.js"
         }
+    },
+    "engines": {
+        "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
     },
     "keywords": [
         "node-red",
@@ -21,14 +25,17 @@
     },
     "version": "1.0.4",
     "description": "ecvida system",
-    "main": "ecvida-iot.js",
+    "main": "./nodes/ecvida-get.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Stepan Kazakov",
-    "license": "GPL",
+    "license": "GPL-3.0",
     "dependencies": {
         "jsdom": "^19.0.0",
         "node-fetch": "^2.6.7"
+    },
+    "directories": {
+        "lib": "lib"
     }
 }

@@ -84,7 +84,7 @@ module.exports = function (RED) {
 
                         let month = document.querySelector("#placeForShowAccrual > div.page_title.accrualTitle > h2").textContent;
                         let sum = formatNumber(document.querySelector("#accrualPage > div.payment_right > div.accruals_total.accrualTotal > div.accr_head > div > div.prise").textContent);
-                        let balance_div = document.querySelector("body > header > div.row.header_container > * div.selectedBalance > div.flatBalance");
+                        let balance_div = document.querySelector("body > header > div.col.object.lBlock.mobile_flat_selector > div.objects_list > a > div.row > * > div.flatBalance");
 
                         out = {
                             accular: {
@@ -93,7 +93,7 @@ module.exports = function (RED) {
                             },
                             balance: {
                                 status: balance_div.classList.contains("balance_green") ? "Переплата" : "Долг",
-                                sum: formatNumber(balance_div.querySelector("span.flat_balance_sum").textContent)
+                                sum: formatNumber(balance_div.textContent)
                             }
                         };
                     }
