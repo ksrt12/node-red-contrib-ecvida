@@ -11,6 +11,23 @@
 
 <script type="text/html" data-help-name="ecvida-send">
     <p>Отправить текущие значения счётчиков</p>
+    <h3>Вход</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">JSON object</span></dt>
+<pre>
+{
+    <i>Серийный номер:</i> [<i>Значение</i>],
+    <i>Серийный номер:</i> [<i>Значение 1, занчение 2, ...</i>],
+    ...
+}
+</pre>
+    </dl>
+
+    <h3>Выход</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>Статус</dd>
+    </dl>
 </script>
 
 

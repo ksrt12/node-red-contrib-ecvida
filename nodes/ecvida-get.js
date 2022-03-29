@@ -68,7 +68,6 @@ module.exports = function (RED) {
                         let all = document.querySelectorAll("body > form > div.indications_list > div");
 
                         for (let counter of all) {
-                            let id = counter.getAttribute("data-id");
                             let content = counter.querySelector("div.content");
                             let title = content.querySelector("div.title").textContent;
                             let serial = counter.querySelector("div.serial").textContent.slice(16);
@@ -76,7 +75,7 @@ module.exports = function (RED) {
                             content.querySelectorAll("div.cells_cover > div.cell").forEach(cell => {
                                 vals.push(formatNumber(cell.querySelector("span").textContent));
                             });
-                            counters[id] = vals;
+                            counters[serial] = { title, vals };
                         }
 
                         out = counters;
@@ -94,7 +93,7 @@ module.exports = function (RED) {
                             },
                             balance: {
                                 status: balance_div.classList.contains("balance_green") ? "Переплата" : "Долг",
-                                balance: formatNumber(balance_div.querySelector("span.flat_balance_sum").textContent)
+                                sum: formatNumber(balance_div.querySelector("span.flat_balance_sum").textContent)
                             }
                         };
                     }

@@ -18,7 +18,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
-Version 1.0.3 28/03/22:
+Version 1.0.4 29/03/22:
+
+-   Write nodes descriptions
+
+Version 1.0.3 29/03/22:
 
 -   Write send counters logic
 

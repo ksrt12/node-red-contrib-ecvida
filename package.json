@@ -19,7 +19,7 @@
         "type": "git",
         "url": "git+https://github.com/ksrt12/node-red-contrib-ecvida.git"
     },
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "ecvida system",
     "main": "ecvida-iot.js",
     "scripts": {

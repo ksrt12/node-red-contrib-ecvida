@@ -18,6 +18,44 @@
 
 <script type="text/html" data-help-name="ecvida-get">
     <p>Получить текущие значения счётчиков или квартплаты за последний месяц</p>
+
+    <h3>Вход</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">any</span></dt>
+    </dl>
+
+    <h3>Выход</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">JSON object</span></dt>
+        <dd>Квартплата
+<pre>
+{
+    accular: {
+        month: <i>текущий месяц и год</i>,
+        sum: <i>сумма</i>
+    },
+    balance: {
+        status: <i>Переплата/Долг</i>,
+        sum: <i>сумма</i>
+    }
+}
+</pre><br>
+Сётчики
+<pre>
+{
+    <i>Серийный номер:</i> {
+        title: <i>Название</i>,
+        vals: [<i>Значение 1, занчение 2, ...</i>]
+    },
+    <i>Серийный номер:</i> {
+        title: <i>Название</i>,
+        vals: [<i>Значение 1, занчение 2, ...</i>]
+    },
+    ...
+}
+</pre>
+        </dd>
+    </dl>
 </script>
 
 
