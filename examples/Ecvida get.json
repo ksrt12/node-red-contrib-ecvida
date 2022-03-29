@@ -1,0 +1,68 @@
+[
+    {
+        "id": "4e3b76223229328f",
+        "type": "inject",
+        "z": "850a7f41f148bf55",
+        "name": "Триггер",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 290,
+        "y": 520,
+        "wires": [
+            [
+                "edcee4fedbd9e6dd"
+            ]
+        ]
+    },
+    {
+        "id": "e0e99c28964b261b",
+        "type": "debug",
+        "z": "850a7f41f148bf55",
+        "name": "Log",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "edcee4fedbd9e6dd",
+        "type": "ecvida-get",
+        "z": "850a7f41f148bf55",
+        "name": "",
+        "login": "699fbe81095a69f0",
+        "command_type": "counters",
+        "x": 480,
+        "y": 520,
+        "wires": [
+            [
+                "e0e99c28964b261b"
+            ]
+        ]
+    },
+    {
+        "id": "699fbe81095a69f0",
+        "type": "ecvida-login",
+        "name": "Ecvida",
+        "username": null,
+        "password": null,
+        "cookies": null,
+        "debug": true
+    }
+]

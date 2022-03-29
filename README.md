@@ -18,6 +18,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.5 30/03/22:
+
+-   Add examples
+
 Version 1.0.4 29/03/22:
 
 -   Write nodes descriptions
