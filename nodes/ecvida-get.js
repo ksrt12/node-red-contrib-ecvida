@@ -39,7 +39,6 @@ module.exports = function (RED) {
             const SetError = (topic, status) => {
                 setStatus("red", "dot", topic, "fail: " + status);
                 node.send(status);
-                return;
             };
 
             const formatNumber = str => parseFloat(str.replace(',', '.').replace(new RegExp(/\s/, 'g'), ''));

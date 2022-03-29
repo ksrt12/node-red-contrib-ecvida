@@ -1,5 +1,7 @@
+const fetch = require("node-fetch");
 const getCookies = require("../lib/getCookies");
 const getHTML = require("../lib/getHTML");
+const { UserAgent } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (RED) {
@@ -30,7 +32,7 @@ module.exports = function (RED) {
             };
 
             const setStatus = (color, shape, topic, status) => {
-                node.status({ fill: color, shape: shape, text: topic });
+                node.status({ fill: color, shape: shape, text: topic + ": " + status });
                 if (is_debug) Debug_Log(topic + ": " + status);
             };
 
@@ -54,16 +56,91 @@ module.exports = function (RED) {
 
                 if (is(cookies, 700)) {
 
-                    let topic = "Send counters";
-                    setStatus("blue", "ring", topic, "begin");
-                    let out;
+                    let news = msg.payload;
 
-                    setStatus("blue", "dot", topic, "ok");
+                    if (typeof news === "object") {
 
-                    msg.payload = out;
+                        let topic = "Send counters";
+                        setStatus("yellow", "ring", topic, "begin");
+
+                        let old = {};
+                        let curr_date = new Date();
+                        let curr_date_str = `01.${curr_date.getMonth()}.${curr_date.getFullYear()}`;
+
+                        let document = await getHTML("https://lkabinet.online/Counters/GetValues?isEdit=true&DayToString=" + curr_date_str, topic, cookies, SetError);
+                        let all = document.querySelectorAll("body > form > div.indications_list > div");
+
+                        for (let counter of all) {
+                            let id = counter.getAttribute("data-id");
+                            let counter_err = counter.querySelector("div.cells_cover > div.counters_error");
+                            let serial = counter.querySelector("div.serial").textContent.slice(16);
+                            let status = (counter_err) ? counter_err.textContent.trim() : "ok";
+
+                            old[serial] = { id, status };
+                        }
+
+                        setStatus("green", "ring", topic, "validate");
+
+                        let out = "";
+                        Object.entries(old).forEach(([serial, vals], i) => {
+                            if (news[serial]) {
+                                if (old[serial].status === "ok") {
+                                    out += `sendedCounterValues[${i}][Id]=${vals.id}&`;
+                                    news[serial].forEach((val, val_i) => {
+                                        out += `sendedCounterValues[${i}][Val${val_i + 1}Str]=${val}&`;
+                                    });
+                                } else {
+                                    Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${old[serial].status}`);
+                                }
+                            }
+                        });
+                        out += "remember=true";
+
+                        setStatus("blue", "ring", topic, "send");
+
+                        let ans = [];
+                        await fetch("https://lkabinet.online/Counters/AddCounterValues",
+                            {
+                                headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'cookie': cookies },
+                                method: "POST",
+                                body: encodeURI(out)
+                            })
+                            .then(res => {
+                                if (res.status === 200) {
+                                    return res.json();
+                                } else {
+                                    throw res.status;
+                                }
+                            })
+                            .then(res => ans = res)
+                            .catch(err => SetError(topic, err));
+
+                        setStatus("blue", "ring", topic, "sended");
+
+                        if (is(ans)) {
+                            let err_count = 0;
+                            ans.forEach(counter => {
+                                let err = counter["Error"];
+                                if (err) {
+                                    Debug_Log(`Значения счётчика с ID ${counter["Id"]} отправлены, но сервер отклонил ответ с ошибкой: ${err}`);
+                                    err_count += 1;
+                                }
+                            });
+
+                            if (err_count === 0) {
+                                setStatus("blue", "dot", topic, "ok");
+                                msg.status = "ok";
+                            } else {
+                                setStatus("yellow", "dot", topic, "warn");
+                            }
+
+                            await sleep(500);
+                            cleanStatus();
+                        }
+                    } else {
+                        msg.payload = "Wrong input JSON format";
+                    }
                     node.send(msg);
-                    await sleep(500);
-                    cleanStatus();
                 }
 
             };////////////// end of acync

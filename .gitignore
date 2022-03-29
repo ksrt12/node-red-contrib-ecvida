@@ -2,3 +2,4 @@ test*
 auth.js
 node_modules/*
 package-lock.json
+ya*

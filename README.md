@@ -18,6 +18,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.3 28/03/22:
+
+-   Write send counters logic
+
 Version 1.0.2 29/03/22:
 
 -   Move getCookies and getHTML functions to modules
