@@ -1,4 +1,5 @@
 const getCookies = require("../lib/getCookies");
+const getCounters = require("../lib/getCounters");
 const getHTML = require("../lib/getHTML");
 const sleep = require('util').promisify(setTimeout);
 
@@ -61,41 +62,41 @@ module.exports = function (RED) {
                     if (command === "counters") {
 
                         let counters = {};
-                        let curr_date = new Date();
-                        let curr_date_str = `01.${curr_date.getMonth()}.${curr_date.getFullYear()}`;
 
-                        let document = await getHTML("https://lkabinet.online/Counters/GetValues?DayToString=" + curr_date_str, topic, cookies, SetError);
-                        let all = document.querySelectorAll("body > form > div.indications_list > div");
+                        let all = await getCounters(topic, cookies, SetError);
+                        if (all) {
+                            for (let counter of all) {
+                                let content = counter.querySelector("div.content");
+                                let title = content.querySelector("div.title").textContent;
+                                let serial = counter.querySelector("div.serial").textContent.slice(16);
+                                let vals = [];
+                                content.querySelectorAll("div.cells_cover > div.cell").forEach(cell => {
+                                    vals.push(formatNumber(cell.querySelector("span").textContent));
+                                });
+                                counters[serial] = { title, vals };
+                            }
 
-                        for (let counter of all) {
-                            let content = counter.querySelector("div.content");
-                            let title = content.querySelector("div.title").textContent;
-                            let serial = counter.querySelector("div.serial").textContent.slice(16);
-                            let vals = [];
-                            content.querySelectorAll("div.cells_cover > div.cell").forEach(cell => {
-                                vals.push(formatNumber(cell.querySelector("span").textContent));
-                            });
-                            counters[serial] = { title, vals };
+                            out = counters;
                         }
-
-                        out = counters;
                     } else {
                         let document = await getHTML("https://lkabinet.online/accruals", topic, cookies, SetError);
 
-                        let month = document.querySelector("#placeForShowAccrual > div.page_title.accrualTitle > h2").textContent;
-                        let sum = formatNumber(document.querySelector("#accrualPage > div.payment_right > div.accruals_total.accrualTotal > div.accr_head > div > div.prise").textContent);
-                        let balance_div = document.querySelector("body > header > div.col.object.lBlock.mobile_flat_selector > div.objects_list > a > div.row > * > div.flatBalance");
+                        if (document) {
+                            let month = document.querySelector("#placeForShowAccrual > div.page_title.accrualTitle > h2").textContent;
+                            let sum = formatNumber(document.querySelector("#accrualPage > div.payment_right > div.accruals_total.accrualTotal > div.accr_head > div > div.prise").textContent);
+                            let balance_div = document.querySelector("body > header > div.col.object.lBlock.mobile_flat_selector > div.objects_list > a > div.row > * > div.flatBalance");
 
-                        out = {
-                            accular: {
-                                month,
-                                sum
-                            },
-                            balance: {
-                                status: balance_div.classList.contains("balance_green") ? "Переплата" : "Долг",
-                                sum: formatNumber(balance_div.textContent)
-                            }
-                        };
+                            out = {
+                                accular: {
+                                    month,
+                                    sum
+                                },
+                                balance: {
+                                    status: balance_div.classList.contains("balance_green") ? "Переплата" : "Долг",
+                                    sum: formatNumber(balance_div.textContent)
+                                }
+                            };
+                        }
                     }
                     setStatus("blue", "dot", topic, "ok");
 

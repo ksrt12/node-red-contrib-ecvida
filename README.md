@@ -18,6 +18,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.6 30/03/22:
+
+-   Allocate getCounters to separate module
+
 Version 1.0.5 30/03/22:
 
 -   Add examples

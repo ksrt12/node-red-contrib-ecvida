@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const getCookies = require("../lib/getCookies");
-const getHTML = require("../lib/getHTML");
+const getCounters = require("../lib/getCounters");
 const { UserAgent } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
@@ -64,78 +64,79 @@ module.exports = function (RED) {
                         setStatus("yellow", "ring", topic, "begin");
 
                         let old = {};
-                        let curr_date = new Date();
-                        let curr_date_str = `01.${curr_date.getMonth()}.${curr_date.getFullYear()}`;
+                        let byId = {};
 
-                        let document = await getHTML("https://lkabinet.online/Counters/GetValues?isEdit=true&DayToString=" + curr_date_str, topic, cookies, SetError);
-                        let all = document.querySelectorAll("body > form > div.indications_list > div");
+                        let all = await getCounters(topic, cookies, SetError, "isEdit=true&");
+                        if (all) {
 
-                        for (let counter of all) {
-                            let id = counter.getAttribute("data-id");
-                            let counter_err = counter.querySelector("div.cells_cover > div.counters_error");
-                            let serial = counter.querySelector("div.serial").textContent.slice(16);
-                            let status = (counter_err) ? counter_err.textContent.trim() : "ok";
+                            for (let counter of all) {
+                                let id = counter.getAttribute("data-id");
+                                let counter_err = counter.querySelector("div.cells_cover > div.counters_error");
+                                let serial = counter.querySelector("div.serial").textContent.slice(16);
+                                let status = (counter_err) ? counter_err.textContent.trim() : "ok";
 
-                            old[serial] = { id, status };
-                        }
-
-                        setStatus("green", "ring", topic, "validate");
-
-                        let out = "";
-                        Object.entries(old).forEach(([serial, vals], i) => {
-                            if (news[serial]) {
-                                if (old[serial].status === "ok") {
-                                    out += `sendedCounterValues[${i}][Id]=${vals.id}&`;
-                                    news[serial].forEach((val, val_i) => {
-                                        out += `sendedCounterValues[${i}][Val${val_i + 1}Str]=${val}&`;
-                                    });
-                                } else {
-                                    Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${old[serial].status}`);
-                                }
+                                old[serial] = { id, status };
+                                byId[id] = serial;
                             }
-                        });
-                        out += "remember=true";
 
-                        setStatus("blue", "ring", topic, "send");
+                            setStatus("green", "ring", topic, "validate");
 
-                        let ans = [];
-                        await fetch("https://lkabinet.online/Counters/AddCounterValues",
-                            {
-                                headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'cookie': cookies },
-                                method: "POST",
-                                body: encodeURI(out)
-                            })
-                            .then(res => {
-                                if (res.status === 200) {
-                                    return res.json();
-                                } else {
-                                    throw res.status;
-                                }
-                            })
-                            .then(res => ans = res)
-                            .catch(err => SetError(topic, err));
-
-                        setStatus("blue", "ring", topic, "sended");
-
-                        if (is(ans)) {
-                            let err_count = 0;
-                            ans.forEach(counter => {
-                                let err = counter["Error"];
-                                if (err) {
-                                    Debug_Log(`Значения счётчика с ID ${counter["Id"]} отправлены, но сервер отклонил ответ с ошибкой: ${err}`);
-                                    err_count += 1;
+                            let out = "";
+                            Object.entries(old).forEach(([serial, vals], i) => {
+                                if (news[serial]) {
+                                    if (old[serial].status === "ok") {
+                                        out += `sendedCounterValues[${i}][Id]=${vals.id}&`;
+                                        news[serial].forEach((val, val_i) => {
+                                            out += `sendedCounterValues[${i}][Val${val_i + 1}Str]=${val}&`;
+                                        });
+                                    } else {
+                                        Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${old[serial].status}`);
+                                    }
                                 }
                             });
+                            out += "remember=true";
 
-                            if (err_count === 0) {
-                                setStatus("blue", "dot", topic, "ok");
-                                msg.status = "ok";
-                            } else {
-                                setStatus("yellow", "dot", topic, "warn");
+                            setStatus("blue", "ring", topic, "send");
+
+                            let ans = [];
+                            await fetch("https://lkabinet.online/Counters/AddCounterValues",
+                                {
+                                    headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'cookie': cookies },
+                                    method: "POST",
+                                    body: encodeURI(out)
+                                })
+                                .then(res => {
+                                    if (res.status === 200) {
+                                        return res.json();
+                                    } else {
+                                        throw res.status;
+                                    }
+                                })
+                                .then(res => ans = res)
+                                .catch(err => SetError(topic, err));
+
+                            setStatus("blue", "ring", topic, "sended");
+
+                            if (is(ans)) {
+                                let err_count = 0;
+                                ans.forEach(counter => {
+                                    let err = counter["Error"];
+                                    if (err) {
+                                        Debug_Log(`Значения счётчика ${byId[counter["Id"]]} отправлены, но сервер отклонил запрос с ошибкой: ${err}`);
+                                        err_count += 1;
+                                    }
+                                });
+
+                                if (err_count === 0) {
+                                    setStatus("blue", "dot", topic, "ok");
+                                    msg.status = "ok";
+                                } else {
+                                    setStatus("yellow", "dot", topic, "warn");
+                                }
+
+                                await sleep(500);
+                                cleanStatus();
                             }
-
-                            await sleep(500);
-                            cleanStatus();
                         }
                     } else {
                         msg.payload = "Wrong input JSON format";
