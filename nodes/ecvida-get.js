@@ -63,21 +63,8 @@ module.exports = function (RED) {
                     let out;
                     if (command === "counters") {
 
-                        let counters = {};
-
-                        let all = await getCounters(topic, cookies, SetError);
-                        if (all) {
-                            for (let counter of all) {
-                                let content = counter.querySelector("div.content");
-                                let title = content.querySelector("div.title").textContent;
-                                let serial = counter.querySelector("div.serial").textContent.slice(16);
-                                let vals = [];
-                                content.querySelectorAll("div.cells_cover > div.cell").forEach(cell => {
-                                    vals.push(formatNumber(cell.querySelector("span").textContent));
-                                });
-                                counters[serial] = { title, vals };
-                            }
-
+                        let { counters } = await getCounters(topic, cookies, SetError);
+                        if (counters) {
                             out = counters;
                         }
                     } else {

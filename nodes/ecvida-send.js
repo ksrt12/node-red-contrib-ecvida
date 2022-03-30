@@ -45,34 +45,32 @@ module.exports = function (RED) {
                         let topic = "Send counters";
                         SetStatus("yellow", "ring", topic, "begin");
 
-                        let old = {};
-                        let byId = {};
-
-                        let all = await getCounters(topic, cookies, SetError, "isEdit=true&");
-                        if (all) {
-
-                            for (let counter of all) {
-                                let id = counter.getAttribute("data-id");
-                                let counter_err = counter.querySelector("div.cells_cover > div.counters_error");
-                                let serial = counter.querySelector("div.serial").textContent.slice(16);
-                                let status = (counter_err) ? counter_err.textContent.trim() : "ok";
-
-                                old[serial] = { id, status };
-                                byId[id] = serial;
-                            }
+                        let { old, byId } = await getCounters(topic, cookies, SetError);
+                        if (old) {
 
                             SetStatus("green", "ring", topic, "validate");
 
                             let out = "";
+                            let toDelete = [];
+
+                            const addToDeleteList = (serial, text_err) => {
+                                Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${text_err}`);
+                                toDelete.push(serial);
+                            };
+
                             Object.entries(old).forEach(([serial, vals], i) => {
                                 if (news[serial]) {
                                     if (old[serial].status === "ok") {
                                         out += `sendedCounterValues[${i}][Id]=${vals.id}&`;
-                                        news[serial].forEach((val, val_i) => {
-                                            out += `sendedCounterValues[${i}][Val${val_i + 1}Str]=${val}&`;
+                                        news[serial].forEach((val, j) => {
+                                            // if (news[serial][j] < old[serial].vals[j]) {
+                                            // addToDeleteList(serial, "Новое значение меньше старого");
+                                            // } else {
+                                            out += `sendedCounterValues[${i}][Val${j + 1}Str]=${val}&`;
+                                            // }
                                         });
                                     } else {
-                                        Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${old[serial].status}`);
+                                        addToDeleteList(serial, old[serial].status);
                                     }
                                 }
                             });
@@ -112,8 +110,11 @@ module.exports = function (RED) {
                                 if (err_count === 0) {
                                     SetStatus("blue", "dot", topic, "ok");
                                     msg.status = "ok";
+                                    toDelete.forEach(serial => delete news[serial]);
+                                    msg.payload = news;
                                 } else {
                                     SetStatus("yellow", "dot", topic, "warn");
+                                    msg.payload = "Данные не отправлены";
                                 }
 
                                 await sleep(500);
