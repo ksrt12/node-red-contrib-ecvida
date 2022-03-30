@@ -2,6 +2,7 @@ const fetch = require("node-fetch");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
 const { UserAgent } = require("../lib/utils");
+const { is, func } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (RED) {
@@ -12,46 +13,27 @@ module.exports = function (RED) {
         this.login = config.login;
         this.login_node = RED.nodes.getNode(this.login);
 
-        this.username = this.login_node.username;
-        this.password = this.login_node.password;
-        this.cookies = this.login_node.cookies;
-        this.is_debug = this.login_node.debug;
+        let username = this.login_node.username;
+        let password = this.login_node.password;
+        let cookies = this.login_node.cookies;
+        let is_debug = this.login_node.debug;
 
         let node = this;
 
+        // Define local functions
+        const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
+        const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
+        const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
+        const cleanStatus = () => func.CleanStatus(node);
+
         node.on('input', function (msg) {
-
-            let username = node.username;
-            let password = node.password;
-            let cookies = node.cookies;
-            let is_debug = node.is_debug;
-
-            const Debug_Log = msg_text => {
-                node.log(msg_text);
-                node.send({ payload: msg_text });
-            };
-
-            const setStatus = (color, shape, topic, status) => {
-                node.status({ fill: color, shape: shape, text: topic + ": " + status });
-                if (is_debug) Debug_Log(topic + ": " + status);
-            };
-
-            const SetError = (topic, status) => {
-                setStatus("red", "dot", topic, "fail: " + status);
-                node.send(status);
-                return;
-            };
-
-            const formatNumber = str => parseFloat(str.replace(',', '.').replace(new RegExp(/\s/, 'g'), ''));
-            const is = (str, length = 1) => (str && str.length > length);
-            const cleanStatus = () => node.status({});
 
             async function make_action() {
 
                 cleanStatus();
 
                 if (!is(cookies, 700)) {
-                    cookies = await getCookies(username, password, setStatus, SetError, Debug_Log);
+                    cookies = await getCookies(username, password, SetStatus, SetError, Debug_Log);
                 }
 
                 if (is(cookies, 700)) {
@@ -61,7 +43,7 @@ module.exports = function (RED) {
                     if (typeof news === "object") {
 
                         let topic = "Send counters";
-                        setStatus("yellow", "ring", topic, "begin");
+                        SetStatus("yellow", "ring", topic, "begin");
 
                         let old = {};
                         let byId = {};
@@ -79,7 +61,7 @@ module.exports = function (RED) {
                                 byId[id] = serial;
                             }
 
-                            setStatus("green", "ring", topic, "validate");
+                            SetStatus("green", "ring", topic, "validate");
 
                             let out = "";
                             Object.entries(old).forEach(([serial, vals], i) => {
@@ -96,7 +78,7 @@ module.exports = function (RED) {
                             });
                             out += "remember=true";
 
-                            setStatus("blue", "ring", topic, "send");
+                            SetStatus("blue", "ring", topic, "send");
 
                             let ans = [];
                             await fetch("https://lkabinet.online/Counters/AddCounterValues",
@@ -115,7 +97,7 @@ module.exports = function (RED) {
                                 .then(res => ans = res)
                                 .catch(err => SetError(topic, err));
 
-                            setStatus("blue", "ring", topic, "sended");
+                            SetStatus("blue", "ring", topic, "sended");
 
                             if (is(ans)) {
                                 let err_count = 0;
@@ -128,10 +110,10 @@ module.exports = function (RED) {
                                 });
 
                                 if (err_count === 0) {
-                                    setStatus("blue", "dot", topic, "ok");
+                                    SetStatus("blue", "dot", topic, "ok");
                                     msg.status = "ok";
                                 } else {
-                                    setStatus("yellow", "dot", topic, "warn");
+                                    SetStatus("yellow", "dot", topic, "warn");
                                 }
 
                                 await sleep(500);

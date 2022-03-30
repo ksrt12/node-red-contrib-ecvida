@@ -10,14 +10,20 @@
     <div class="form-row">
         <label for="node-input-command_type"><i class="icon-tag"></i> Получить</label>
         <select id="node-input-command_type">
-          <option value="counters">Счётчики</option>
-          <option value="acculars">Квартплата</option>
+            <option value="acculars">Начисления</option>
+            <option value="payments">Оплаты</option>
+            <option value="counters">Счётчики</option>
+            <option value="payload">- msg.payload -</option>
         </select>
+    </div>
+    <div class="form-row node-input-calendar">
+        <label for="node-input-calendar"> Месяц и год</label>
+        <input type="text" id="node-input-calendar" placeholder="03.2022">
     </div>
 </script>
 
 <script type="text/html" data-help-name="ecvida-get">
-    <p>Получить текущие значения счётчиков или квартплаты за последний месяц</p>
+    <p>Получить текущие значения счётчиков, начислений или оплат</p>
 
     <h3>Вход</h3>
     <dl class="message-properties">
@@ -67,7 +73,8 @@
         defaults: {
             name: { value: null, required: false },
             login: { type: "ecvida-login", required: true },
-            command_type: { value: "counters" }
+            command_type: { value: "counters" },
+            calendar: { value: null, required: false }
         },
         inputs: 1,
         outputs: 1,
@@ -79,6 +86,13 @@
         },
         oneditprepare: function () {
             let node = this;
+            $("#node-input-command_type").on("change", function () {
+                if ($(this).val() === "payload" || $(this).val() === "acculars") {
+                    $(".node-input-calendar").hide();
+                } else {
+                    $(".node-input-calendar").show();
+                }
+            });
         },
         oneditsave: function () {
         }

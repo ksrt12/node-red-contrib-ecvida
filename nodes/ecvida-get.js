@@ -3,6 +3,8 @@ const getCounters = require("../lib/getCounters");
 const getHTML = require("../lib/getHTML");
 const sleep = require('util').promisify(setTimeout);
 
+const { is, formatNumber, func } = require("../lib/utils");
+
 module.exports = function (RED) {
 
     function Ecvida_Get(config) {
@@ -10,54 +12,54 @@ module.exports = function (RED) {
 
         this.login = config.login;
         this.login_node = RED.nodes.getNode(this.login);
-        this.command_type = config.command_type;
 
-        this.username = this.login_node.username;
-        this.password = this.login_node.password;
-        this.cookies = this.login_node.cookies;
-        this.is_debug = this.login_node.debug;
+        let username = this.login_node.username;
+        let password = this.login_node.password;
+        let cookies = this.login_node.cookies;
+        let is_debug = this.login_node.debug;
+        let command = config.command_type;
+        let calendar = config.calendar;
 
         let node = this;
 
+        // Define local functions
+        const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
+        const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
+        const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
+        const cleanStatus = () => func.CleanStatus(node);
+
         node.on('input', function (msg) {
 
-            let username = node.username;
-            let password = node.password;
-            let cookies = node.cookies;
-            let command = node.command_type;
-            let is_debug = node.is_debug;
+            let payload = msg.payload;
+            if (command === "payload") {
+                if (typeof payload === "object") {
+                    ({ command, calendar } = payload);
+                } else {
+                    SetError("Input", "Bad JSON");
+                    return;
+                }
+            }
 
-            const Debug_Log = msg_text => {
-                node.log(msg_text);
-                node.send({ payload: msg_text });
-            };
+            switch (command) {
+                case "accruals":
+                case "payments":
+                case "counters":
+                    break;
+            }
 
-            const setStatus = (color, shape, topic, status) => {
-                node.status({ fill: color, shape: shape, text: topic });
-                if (is_debug) Debug_Log(topic + ": " + status);
-            };
-
-            const SetError = (topic, status) => {
-                setStatus("red", "dot", topic, "fail: " + status);
-                node.send(status);
-            };
-
-            const formatNumber = str => parseFloat(str.replace(',', '.').replace(new RegExp(/\s/, 'g'), ''));
-            const is = (str, length = 1) => (str && str.length > length);
-            const cleanStatus = () => node.status({});
 
             async function make_action() {
 
                 cleanStatus();
 
                 if (!is(cookies, 700)) {
-                    cookies = await getCookies(username, password, setStatus, SetError, Debug_Log);
+                    cookies = await getCookies(username, password, SetStatus, SetError, Debug_Log);
                 }
 
                 if (is(cookies, 700)) {
 
                     let topic = "Get " + command;
-                    setStatus("blue", "ring", topic, "begin");
+                    SetStatus("blue", "ring", topic, "begin");
                     let out;
                     if (command === "counters") {
 
@@ -98,7 +100,7 @@ module.exports = function (RED) {
                             };
                         }
                     }
-                    setStatus("blue", "dot", topic, "ok");
+                    SetStatus("blue", "dot", topic, "ok");
 
                     msg.payload = out;
                     node.send(msg);
