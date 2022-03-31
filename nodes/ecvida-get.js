@@ -1,9 +1,9 @@
+const getAcculars = require("../lib/getAcculars");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
-const getHTML = require("../lib/getHTML");
 const sleep = require('util').promisify(setTimeout);
 
-const { is, formatNumber, func } = require("../lib/utils");
+const { is, func } = require("../lib/utils");
 
 module.exports = function (RED) {
 
@@ -40,12 +40,7 @@ module.exports = function (RED) {
                 }
             }
 
-            switch (command) {
-                case "accruals":
-                case "payments":
-                case "counters":
-                    break;
-            }
+
 
 
             async function make_action() {
@@ -61,31 +56,16 @@ module.exports = function (RED) {
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
-                    if (command === "counters") {
 
-                        let { counters } = await getCounters(topic, cookies, SetError, calendar);
-                        if (counters) {
-                            out = counters;
-                        }
-                    } else {
-                        let document = await getHTML("https://lkabinet.online/accruals", topic, cookies, SetError);
-
-                        if (document) {
-                            let month = document.querySelector("#placeForShowAccrual > div.page_title.accrualTitle > h2").textContent;
-                            let sum = formatNumber(document.querySelector("#accrualPage > div.payment_right > div.accruals_total.accrualTotal > div.accr_head > div > div.prise").textContent);
-                            let balance_div = document.querySelector("body > header > div.col.object.lBlock.mobile_flat_selector > div.objects_list > a > div.row > * > div.flatBalance");
-
-                            out = {
-                                accular: {
-                                    month,
-                                    sum
-                                },
-                                balance: {
-                                    status: balance_div.classList.contains("balance_green") ? "Переплата" : "Долг",
-                                    sum: formatNumber(balance_div.textContent)
-                                }
-                            };
-                        }
+                    switch (command) {
+                        case "acculars":
+                            out ??= await getAcculars(topic, cookies, SetError);
+                            break;
+                        case "payments":
+                        case "counters":
+                            let { counters } = await getCounters(topic, cookies, SetError, calendar);
+                            out ??= counters;
+                            break;
                     }
 
                     if (out) {
