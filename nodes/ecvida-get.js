@@ -41,9 +41,6 @@ module.exports = function (RED) {
                 }
             }
 
-
-
-
             async function make_action() {
 
                 cleanStatus();
