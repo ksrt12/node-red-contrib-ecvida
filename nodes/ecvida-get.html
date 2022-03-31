@@ -29,43 +29,76 @@
 <script type="text/html" data-help-name="ecvida-get">
     <p>Получить текущие значения счётчиков, начислений или оплат</p>
 
-    <h3>Вход</h3>
+    <h2>Вход</h2>
     <dl class="message-properties">
-        <dt>payload <span class="property-type">any</span></dt>
+        <dt>payload <span class="property-type">any | JSON object</span></dt>
     </dl>
 
-    <h3>Выход</h3>
+    <h2>Выход</h2>
+    
+    <h3>Начисления</h3>
     <dl class="message-properties">
         <dt>payload <span class="property-type">JSON object</span></dt>
-        <dd>Квартплата
+        <dd>
 <pre>
 {
-    accrual: {
-        month: <i>текущий месяц и год</i>,
-        sum: <i>сумма</i>
-    },
     balance: {
         status: <i>Переплата/Долг</i>,
         sum: <i>сумма</i>
+    },
+    accruals: {
+        month: <i>месяц и год</i>,
+        sum: <i>сумма</i>
+    }
+    // или
+    accruals: {
+        <i>год</i>: {
+            <i>месяц</i>: <i>сумма</i>,
+            <i>месяц</i>: <i>сумма</i>,
+            ...
+        },
+        <i>год</i>: {
+            <i>месяц</i>: <i>сумма</i>,
+            <i>месяц</i>: <i>сумма</i>,
+            ...
+        },
+        ...
     }
 }
-</pre><br>
-Сётчики
+</pre></dd></dl><br>
+<h3>Оплаты</h3>
+<dl class="message-properties">
+    <dt>payload <span class="property-type">JSON object</span></dt>
+    <dd>
+        <pre>
+{
+    <i>дата</i>: <i>сумма</i>,
+    ....
+}
+</pre>
+</dd>
+</dl><br>
+<h3>Счётчики</h3>
+<dl class="message-properties">
+    <dt>payload <span class="property-type">JSON object</span></dt>
+    <dd>
 <pre>
 {
     <i>Серийный номер:</i> {
         title: <i>Название</i>,
-        vals: [<i>Значение 1, занчение 2, ...</i>]
+        vals: [<i>Значение 1, занчение 2, ...</i>],
+        status: <i>Статус</i>
     },
     <i>Серийный номер:</i> {
         title: <i>Название</i>,
-        vals: [<i>Значение 1, занчение 2, ...</i>]
+        vals: [<i>Значение 1, занчение 2, ...</i>],
+        status: <i>Статус</i>
     },
     ...
 }
 </pre>
-        </dd>
-    </dl>
+</dd>
+</dl>
 </script>
 
 
@@ -92,13 +125,19 @@
         oneditprepare: function () {
             let node = this;
             $("#node-input-command_type").on("change", function () {
-                [$(".node-input-calendar"), $(".node-input-get_all")].forEach(i => {
-                    if ($(this).val() === "payload") {
-                        i.hide();
+                if ($(this).val() === "payload") {
+                    $(".node-input-calendar").hide();
+                    $(".node-input-get_all").hide();
+                } else {
+                    $(".node-input-calendar").show();
+                    if ($(this).val() === "accruals") {
+                        $(".node-input-get_all").show();
                     } else {
-                        i.show();
+                        $("#node-input-calendar").prop("disabled", false);
+                        $(".node-input-get_all").hide();
+                        $("#node-input-get_all").prop("checked", false);
                     }
-                });
+                }
             });
             $("#node-input-get_all").on("change", function () {
                 $("#node-input-calendar").prop("disabled", $(this).prop('checked'));
