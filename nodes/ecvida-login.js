@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (RED) {
 
     function Ecvida_Config_Node(config) {

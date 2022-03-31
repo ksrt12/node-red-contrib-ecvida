@@ -1,3 +1,4 @@
+"use strict";
 const fetch = require("node-fetch");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
@@ -40,6 +41,7 @@ module.exports = function (RED) {
                 if (is(cookies, 700)) {
 
                     let news = msg.payload;
+                    msg.payload = "Что-то пошло не так...";
 
                     if (typeof news === "object") {
 

@@ -1,3 +1,4 @@
+"use strict";
 const getAcculars = require("../lib/getAcculars");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
