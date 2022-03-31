@@ -2,7 +2,7 @@
 
 ## Nodes:
 
--   **ecvida-get** Get acculars and counters
+-   **ecvida-get** Get accruals, payments or counters
 -   **ecvida-send** Send counters
 
 ## Installation:
@@ -18,6 +18,12 @@ npm install *full path to cloned repo folder*
 ```
 
 ## Changelog
+
+Version 1.0.10 01/04/22:
+
+-   Expand get accruals params
+-   Use strict
+-   Use destructurization
 
 Version 1.0.9 31/03/22:
 
@@ -55,7 +61,7 @@ Version 1.0.2 29/03/22:
 
 Version 1.0.1 28/03/22:
 
--   Write get counters and acculars logic
+-   Write get counters and accruals logic
 
 Version 1.0.0 28/03/22:
 

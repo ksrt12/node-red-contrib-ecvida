@@ -1,5 +1,5 @@
 "use strict";
-const getAcculars = require("../lib/getAcculars");
+const getAccruals = require("../lib/getAccruals");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
 const getPayments = require("../lib/getPayments");
@@ -21,6 +21,7 @@ module.exports = function (RED) {
         let is_debug = this.login_node.debug;
         let command = config.command_type;
         let date = config.calendar;
+        let getAll = config.get_all;
 
         let node = this;
 
@@ -57,17 +58,17 @@ module.exports = function (RED) {
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
 
-                    let defVars = { topic, cookies, SetError };
+                    let defVars = { topic, cookies, SetError, date };
 
                     switch (command) {
-                        case "acculars":
-                            out ??= await getAcculars({ ...defVars });
+                        case "accruals":
+                            out ??= await getAccruals({ ...defVars, getAll });
                             break;
                         case "payments":
-                            out ??= await getPayments({ ...defVars, date });
+                            out ??= await getPayments({ ...defVars });
                             break;
                         case "counters":
-                            let { counters } = await getCounters({ ...defVars, date });
+                            let { counters } = await getCounters({ ...defVars });
                             out ??= counters;
                             break;
                     }
