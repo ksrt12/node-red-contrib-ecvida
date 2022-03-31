@@ -19,6 +19,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.9 31/03/22:
+
+-   Move date generation logic to separate file
+-   Don't crush node-red on errors
+
 Version 1.0.8 31/03/22:
 
 -   Implement get payments
