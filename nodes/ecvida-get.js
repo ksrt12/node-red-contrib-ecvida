@@ -63,7 +63,7 @@ module.exports = function (RED) {
                     let out;
                     if (command === "counters") {
 
-                        let { counters } = await getCounters(topic, cookies, SetError);
+                        let { counters } = await getCounters(topic, cookies, SetError, calendar);
                         if (counters) {
                             out = counters;
                         }
@@ -87,12 +87,14 @@ module.exports = function (RED) {
                             };
                         }
                     }
-                    SetStatus("blue", "dot", topic, "ok");
 
-                    msg.payload = out;
-                    node.send(msg);
-                    await sleep(500);
-                    cleanStatus();
+                    if (out) {
+                        SetStatus("blue", "dot", topic, "ok");
+                        msg.payload = out;
+                        node.send(msg);
+                        await sleep(500);
+                        cleanStatus();
+                    }
                 }
 
             };////////////// end of acync

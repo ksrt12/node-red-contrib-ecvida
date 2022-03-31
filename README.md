@@ -1,8 +1,9 @@
-# Node-RED nodes for work with Ecvida
+# Ecvida ([lkabinet.online](https://lkabinet.online))
 
 ## Nodes:
 
--   **ecvida-get** Get info from [lkabinet.online](https://lkabinet.online)
+-   **ecvida-get** Get acculars and counters
+-   **ecvida-send** Send counters
 
 ## Installation:
 
@@ -17,6 +18,11 @@ npm install *full path to cloned repo folder*
 ```
 
 ## Changelog
+
+Version 1.0.7 31/03/22:
+
+-   Implement date selection in get node
+-   Fix utils.js
 
 Version 1.0.6 30/03/22:
 
