@@ -24,6 +24,7 @@ module.exports = function (RED) {
         const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
         const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
         const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
+        const funcions = { Debug_Log, SetStatus, SetError };
         const cleanStatus = () => func.CleanStatus(node);
 
         node.on('input', function (msg) {
@@ -33,7 +34,7 @@ module.exports = function (RED) {
                 cleanStatus();
 
                 if (!is(cookies, 700)) {
-                    cookies = await getCookies(username, password, SetStatus, SetError, Debug_Log);
+                    cookies = await getCookies({ username, password, ...funcions });
                 }
 
                 if (is(cookies, 700)) {
@@ -45,7 +46,7 @@ module.exports = function (RED) {
                         let topic = "Send counters";
                         SetStatus("yellow", "ring", topic, "begin");
 
-                        let { old, byId } = await getCounters(topic, cookies, SetError);
+                        let { old, byId } = await getCounters({ topic, cookies, SetError });
                         if (old) {
 
                             SetStatus("green", "ring", topic, "validate");

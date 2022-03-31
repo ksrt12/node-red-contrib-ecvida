@@ -19,7 +19,7 @@ module.exports = function (RED) {
         let cookies = this.login_node.cookies;
         let is_debug = this.login_node.debug;
         let command = config.command_type;
-        let calendar = config.calendar;
+        let date = config.calendar;
 
         let node = this;
 
@@ -27,6 +27,7 @@ module.exports = function (RED) {
         const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
         const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
         const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
+        const funcions = { Debug_Log, SetStatus, SetError };
         const cleanStatus = () => func.CleanStatus(node);
 
         node.on('input', function (msg) {
@@ -34,7 +35,7 @@ module.exports = function (RED) {
             let payload = msg.payload;
             if (command === "payload") {
                 if (typeof payload === "object") {
-                    ({ command, calendar } = payload);
+                    ({ command, date } = payload);
                 } else {
                     SetError("Input", "Bad JSON");
                     return;
@@ -46,7 +47,7 @@ module.exports = function (RED) {
                 cleanStatus();
 
                 if (!is(cookies, 700)) {
-                    cookies = await getCookies(username, password, SetStatus, SetError, Debug_Log);
+                    cookies = await getCookies({ username, password, ...funcions });
                 }
 
                 if (is(cookies, 700)) {
@@ -55,15 +56,17 @@ module.exports = function (RED) {
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
 
+                    let defVars = { topic, cookies, SetError };
+
                     switch (command) {
                         case "acculars":
-                            out ??= await getAcculars(topic, cookies, SetError);
+                            out ??= await getAcculars({ ...defVars });
                             break;
                         case "payments":
-                            out ??= await getPayments(topic, cookies, SetError, calendar);
+                            out ??= await getPayments({ ...defVars, date });
                             break;
                         case "counters":
-                            let { counters } = await getCounters(topic, cookies, SetError, calendar);
+                            let { counters } = await getCounters({ ...defVars, date });
                             out ??= counters;
                             break;
                     }
