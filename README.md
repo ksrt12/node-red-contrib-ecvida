@@ -19,6 +19,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 1.0.8 31/03/22:
+
+-   Implement get payments
+
 Version 1.0.7 31/03/22:
 
 -   Implement date selection in get node

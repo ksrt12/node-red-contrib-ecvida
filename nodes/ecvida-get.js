@@ -1,6 +1,7 @@
 const getAcculars = require("../lib/getAcculars");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
+const getPayments = require("../lib/getPayments");
 const sleep = require('util').promisify(setTimeout);
 
 const { is, func } = require("../lib/utils");
@@ -62,6 +63,8 @@ module.exports = function (RED) {
                             out ??= await getAcculars(topic, cookies, SetError);
                             break;
                         case "payments":
+                            out ??= await getPayments(topic, cookies, SetError, calendar);
+                            break;
                         case "counters":
                             let { counters } = await getCounters(topic, cookies, SetError, calendar);
                             out ??= counters;
