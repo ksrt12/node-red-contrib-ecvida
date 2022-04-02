@@ -3,7 +3,6 @@
 const getAccruals = require("../lib/getAccruals");
 const getConfig = require("../lib/getConfig");
 const getCounters = require("../lib/getCounters");
-const getCountersNew = require("../lib/getCountersNew");
 const getHost = require("../lib/getHost");
 const getPayments = require("../lib/getPayments");
 const getToken = require("../lib/getToken");
@@ -115,7 +114,7 @@ module.exports = function (RED) {
                             break;
                         case "counters":
                             // let { counters } = await getCounters({ ...defVars });
-                            out ??= await getCountersNew(defGetParams);
+                            out ??= await getCounters(defGetParams);
                             break;
                     }
 
