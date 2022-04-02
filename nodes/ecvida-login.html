@@ -6,8 +6,8 @@
         <input type="text" id="node-config-input-name" placeholder="Имя">
     </div>
     <div class="form-row">
-        <label for="node-input-uk"><i class="fa fa-server"></i> УК</label>
-        <select id="node-input-uk">
+        <label for="node-config-input-uk"><i class="fa fa-server"></i> УК</label>
+        <select id="node-config-input-uk">
             <option value="legion">Голос Комфорт</option>
             <option value="ecvida">Ecvida</option>
             <option value="kama">УК "КамаСтройИнвест"</option>
@@ -67,8 +67,12 @@
         <input type="text" id="node-config-input-cookies" placeholder=".ASPXAUTH=....; .ASPXROLES=....">
     </div>
     <div class="form-row">
-        <label for="node-config-input-cookies"><i class="fa fa-cogs"></i> Token</label>
-        <input type="text" id="node-config-input-cookies" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        <label for="node-config-input-token"><i class="fa fa-cogs"></i> Token</label>
+        <input type="text" id="node-config-input-token" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-flatId"><i class="fa fa-cogs"></i> ID Квартиры</label>
+        <input type="text" id="node-config-input-flatId" placeholder="xxxxxx">
     </div>
     <div class="form-row">
         <label for='node-config-input-debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
@@ -89,10 +93,11 @@
             password: { value: null, required: true },
             cookies: { value: "", required: false },
             token: { value: "", required: false },
+            flatId: { value: "", required: false },
             debug: { value: false }
         },
         label: function () {
-            return this.name || this.uk || "Ecvida";
+            return this.name || this.uk;
         }
     });
 </script>

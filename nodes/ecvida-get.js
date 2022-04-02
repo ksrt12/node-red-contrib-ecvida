@@ -1,6 +1,7 @@
 "use strict";
-const checkToken = require("../lib/checkToken");
+
 const getAccruals = require("../lib/getAccruals");
+const getConfig = require("../lib/getConfig");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
 const getHost = require("../lib/getHost");
@@ -23,6 +24,7 @@ module.exports = function (RED) {
         let uk = this.login_node.uk;
         let token = this.login_node.token;
         let cookies = this.login_node.cookies;
+        let flatId = this.login_node.flatId;
         let is_debug = this.login_node.debug;
         let command = config.command_type;
         let date = config.calendar;
@@ -51,7 +53,7 @@ module.exports = function (RED) {
 
             async function make_action() {
 
-                let validToken = false;
+                let validFlatId = "";
 
                 let defHeaders = {
                     "Version": 4,
@@ -60,7 +62,6 @@ module.exports = function (RED) {
                     "device": "xiaomi mido",
                     "OSdata": "Android 24",
                     "User-Agent": "okhttp/4.9.0",
-
                 };
 
                 cleanStatus();
@@ -77,7 +78,11 @@ module.exports = function (RED) {
                 if (is(token, 30)) {
                     defHeaders["Authorization"] = "Bearer " + token;
                     defHeaders["Content-Type"] = "application/json; charset=utf-8";
-                    validToken = await checkToken({ host, defHeaders, ...funcions });
+                    validFlatId = await getConfig({ flatId, host, defHeaders, ...funcions });
+                }
+
+                if (is(validFlatId)) {
+                    console.log(validFlatId);
                 }
 
                 if (is(cookies, 700)) {
