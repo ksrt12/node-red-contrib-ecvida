@@ -2,7 +2,6 @@
 
 const getAccruals = require("../lib/getAccruals");
 const getConfig = require("../lib/getConfig");
-const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
 const getCountersNew = require("../lib/getCountersNew");
 const getHost = require("../lib/getHost");
@@ -105,7 +104,7 @@ module.exports = function (RED) {
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
 
-                    let defVars = { topic, cookies, SetError, date };
+                    let defVars = { topic, SetError, date };
 
                     switch (command) {
                         case "accruals":

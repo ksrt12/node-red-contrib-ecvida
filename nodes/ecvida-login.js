@@ -8,7 +8,6 @@ module.exports = function (RED) {
         this.uk = config.uk;
         this.username = config.username;
         this.password = config.password;
-        this.cookies = config.cookies;
         this.token = config.token;
         this.flatId = config.flatId;
         this.debug = config.debug;
