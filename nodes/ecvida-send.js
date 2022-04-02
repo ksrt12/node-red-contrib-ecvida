@@ -1,8 +1,8 @@
 "use strict";
-const fetch = require("node-fetch");
-const getCookies = require("../lib/getCookies");
-const getCounters = require("../lib/getCounters");
-const { UserAgent } = require("../lib/utils");
+const getConfig = require("../lib/getConfig");
+const getHost = require("../lib/getHost");
+const getToken = require("../lib/getToken");
+const sendCounters = require("../lib/sendCounters");
 const { is, func } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
@@ -14,121 +14,82 @@ module.exports = function (RED) {
         this.login = config.login;
         this.login_node = RED.nodes.getNode(this.login);
 
+        /** @type {string} */
         let username = this.login_node.username;
+        /** @type {string} */
         let password = this.login_node.password;
-        let cookies = this.login_node.cookies;
+        /** @type {string} */
+        let uk = this.login_node.uk;
+        /** @type {string} */
+        let token = this.login_node.token;
+        /** @type {string} */
+        let flatId = this.login_node.flatId;
+        /** @type {boolean} */
         let is_debug = this.login_node.debug;
 
         let node = this;
 
         // Define local functions
+        /** @param {string} msg_text Message text */
         const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
         const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
         const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
-        const funcions = { Debug_Log, SetStatus, SetError };
+        /**
+         * @param {Function} Debug_Log Send to debug log
+         * @param {Function} SetStatus Set node status
+         * @param {Function} SetError Set node error status
+         */
+        const defFunctions = { Debug_Log, SetStatus, SetError };
         const cleanStatus = () => func.CleanStatus(node);
-
         node.on('input', function (msg) {
 
             async function make_action() {
 
                 cleanStatus();
+                let news = msg.payload;
+                msg.payload = "Что-то пошло не так...";
 
-                if (!is(cookies, 700)) {
-                    cookies = await getCookies({ username, password, ...funcions });
-                }
+                if (typeof news === "object") {
 
-                if (is(cookies, 700)) {
+                    const host = getHost(uk);
+                    let validFlatId = "";
+                    let defHeaders = {
+                        "Version": 4,
+                        "OS": "Android",
+                        "bundleID": (uk === "pro.wellsoft.smartzhk") ? uk : "com.wellsoft." + uk,
+                        "device": "xiaomi mido",
+                        "OSdata": "Android 24",
+                        "User-Agent": "okhttp/4.9.0",
+                    };
 
-                    let news = msg.payload;
-                    msg.payload = "Что-то пошло не так...";
-
-                    if (typeof news === "object") {
-
-                        let topic = "Send counters";
-                        SetStatus("yellow", "ring", topic, "begin");
-
-                        let { old, byId } = await getCounters({ topic, cookies, SetError });
-                        if (old) {
-
-                            SetStatus("green", "ring", topic, "validate");
-
-                            let out = "";
-                            let toDelete = [];
-
-                            const addToDeleteList = (serial, text_err) => {
-                                Debug_Log(`Значение счётчика ${serial} не будет отправлено: ${text_err}`);
-                                toDelete.push(serial);
-                            };
-
-                            Object.entries(old).forEach(([serial, vals], i) => {
-                                if (news[serial]) {
-                                    if (old[serial].status === "ok") {
-                                        out += `sendedCounterValues[${i}][Id]=${vals.id}&`;
-                                        news[serial].forEach((val, j) => {
-                                            // if (news[serial][j] < old[serial].vals[j]) {
-                                            // addToDeleteList(serial, "Новое значение меньше старого");
-                                            // } else {
-                                            out += `sendedCounterValues[${i}][Val${j + 1}Str]=${val}&`;
-                                            // }
-                                        });
-                                    } else {
-                                        addToDeleteList(serial, old[serial].status);
-                                    }
-                                }
-                            });
-                            out += "remember=true";
-
-                            SetStatus("blue", "ring", topic, "send");
-
-                            let ans = [];
-                            await fetch("https://lkabinet.online/Counters/AddCounterValues",
-                                {
-                                    headers: { 'User-Agent': UserAgent, 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'cookie': cookies },
-                                    method: "POST",
-                                    body: encodeURI(out)
-                                })
-                                .then(res => {
-                                    if (res.status === 200) {
-                                        return res.json();
-                                    } else {
-                                        throw res.status;
-                                    }
-                                })
-                                .then(res => ans = res)
-                                .catch(err => SetError(topic, err));
-
-                            SetStatus("blue", "ring", topic, "sended");
-
-                            if (is(ans)) {
-                                let err_count = 0;
-                                ans.forEach(counter => {
-                                    let err = counter["Error"];
-                                    if (err) {
-                                        Debug_Log(`Значения счётчика ${byId[counter["Id"]]} отправлены, но сервер отклонил запрос с ошибкой: ${err}`);
-                                        err_count += 1;
-                                    }
-                                });
-
-                                if (err_count === 0) {
-                                    SetStatus("blue", "dot", topic, "ok");
-                                    msg.status = "ok";
-                                    toDelete.forEach(serial => delete news[serial]);
-                                    msg.payload = news;
-                                } else {
-                                    SetStatus("yellow", "dot", topic, "warn");
-                                    msg.payload = "Данные не отправлены";
-                                }
-
-                                await sleep(500);
-                                cleanStatus();
-                            }
-                        }
-                    } else {
-                        msg.payload = "Wrong input JSON format";
+                    if (!is(token, 30)) {
+                        token = await getToken({ username, password, defHeaders, host, ...defFunctions });
                     }
-                    node.send(msg);
+
+                    /**
+                     * @param {string} flatId Flat ID
+                     * @param {string} host Host
+                     * @param {object} defHeaders {@link defHeaders}
+                     * @param {object} defFuctions {@link defFunctions}
+                     */
+                    let defGetParams = {};
+                    if (is(token, 30)) {
+                        defHeaders["Authorization"] = "Bearer " + token;
+                        defHeaders["Content-Type"] = "application/json; charset=utf-8";
+                        defGetParams = { flatId, host, defHeaders, ...defFunctions };
+                        validFlatId = await getConfig(defGetParams);
+                    }
+
+                    if (is(validFlatId)) {
+
+                        msg.payload = await sendCounters({ news, ...defGetParams });
+                    }
+                } else {
+                    msg.payload = "Wrong input JSON format";
                 }
+                node.send(msg);
+                await sleep(500);
+                cleanStatus();
 
             };////////////// end of acync
 

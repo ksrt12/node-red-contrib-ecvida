@@ -20,24 +20,38 @@ module.exports = function (RED) {
         this.login = config.login;
         this.login_node = RED.nodes.getNode(this.login);
 
+        /** @type {string} */
         let username = this.login_node.username;
+        /** @type {string} */
         let password = this.login_node.password;
+        /** @type {string} */
         let uk = this.login_node.uk;
+        /** @type {string} */
         let token = this.login_node.token;
-        let cookies = this.login_node.cookies;
+        /** @type {string} */
         let flatId = this.login_node.flatId;
+        /** @type {boolean} */
         let is_debug = this.login_node.debug;
+        /** @type {string} */
         let command = config.command_type;
+        /** @type {string} */
         let date = config.calendar;
+        /** @type {boolean} */
         let getAll = config.get_all;
 
         let node = this;
 
         // Define local functions
+        /** @param {string} msg_text Message text */
         const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
         const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
         const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
-        const funcions = { Debug_Log, SetStatus, SetError };
+        /**
+         * @param {Function} Debug_Log Send to debug log
+         * @param {Function} SetStatus Set node status
+         * @param {Function} SetError Set node error status
+         */
+        const defFunctions = { Debug_Log, SetStatus, SetError };
         const cleanStatus = () => func.CleanStatus(node);
 
         node.on('input', function (msg) {
@@ -54,8 +68,10 @@ module.exports = function (RED) {
 
             async function make_action() {
 
-                let validFlatId = "";
+                cleanStatus();
 
+                const host = getHost(uk);
+                let validFlatId = "";
                 let defHeaders = {
                     "Version": 4,
                     "OS": "Android",
@@ -65,27 +81,22 @@ module.exports = function (RED) {
                     "User-Agent": "okhttp/4.9.0",
                 };
 
-                cleanStatus();
-                const host = getHost(uk);
-
-                if (!is(cookies, 700)) {
-                    cookies = await getCookies({ username, password, ...funcions });
-                }
-
                 if (!is(token, 30)) {
-                    token = await getToken({ username, password, defHeaders, host, ...funcions });
+                    token = await getToken({ username, password, defHeaders, host, ...defFunctions });
                 }
 
+                /**
+                 * @param {string} flatId Flat ID
+                 * @param {string} host Host
+                 * @param {object} defHeaders {@link defHeaders}
+                 * @param {object} defFuctions {@link defFunctions}
+                 */
                 let defGetParams = {};
                 if (is(token, 30)) {
                     defHeaders["Authorization"] = "Bearer " + token;
                     defHeaders["Content-Type"] = "application/json; charset=utf-8";
-                    defGetParams = { flatId, host, defHeaders, ...funcions };
+                    defGetParams = { flatId, host, defHeaders, ...defFunctions };
                     validFlatId = await getConfig(defGetParams);
-                }
-
-                if (is(validFlatId)) {
-                    console.log(validFlatId);
                 }
 
                 if (is(validFlatId)) {
