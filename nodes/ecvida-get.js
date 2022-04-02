@@ -1,7 +1,9 @@
 "use strict";
+const checkToken = require("../lib/checkToken");
 const getAccruals = require("../lib/getAccruals");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
+const getHost = require("../lib/getHost");
 const getPayments = require("../lib/getPayments");
 const getToken = require("../lib/getToken");
 const sleep = require('util').promisify(setTimeout);
@@ -49,14 +51,33 @@ module.exports = function (RED) {
 
             async function make_action() {
 
+                let validToken = false;
+
+                let defHeaders = {
+                    "Version": 4,
+                    "OS": "Android",
+                    "bundleID": (uk === "pro.wellsoft.smartzhk") ? uk : "com.wellsoft." + uk,
+                    "device": "xiaomi mido",
+                    "OSdata": "Android 24",
+                    "User-Agent": "okhttp/4.9.0",
+
+                };
+
                 cleanStatus();
+                const host = getHost(uk);
 
                 if (!is(cookies, 700)) {
                     cookies = await getCookies({ username, password, ...funcions });
                 }
 
                 if (!is(token, 30)) {
-                    token = await getToken({ username, password, uk, ...funcions });
+                    token = await getToken({ username, password, defHeaders, host, ...funcions });
+                }
+
+                if (is(token, 30)) {
+                    defHeaders["Authorization"] = "Bearer " + token;
+                    defHeaders["Content-Type"] = "application/json; charset=utf-8";
+                    validToken = await checkToken({ host, defHeaders, ...funcions });
                 }
 
                 if (is(cookies, 700)) {
