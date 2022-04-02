@@ -4,6 +4,7 @@ const getAccruals = require("../lib/getAccruals");
 const getConfig = require("../lib/getConfig");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
+const getCountersNew = require("../lib/getCountersNew");
 const getHost = require("../lib/getHost");
 const getPayments = require("../lib/getPayments");
 const getToken = require("../lib/getToken");
@@ -75,17 +76,19 @@ module.exports = function (RED) {
                     token = await getToken({ username, password, defHeaders, host, ...funcions });
                 }
 
+                let defGetParams = {};
                 if (is(token, 30)) {
                     defHeaders["Authorization"] = "Bearer " + token;
                     defHeaders["Content-Type"] = "application/json; charset=utf-8";
-                    validFlatId = await getConfig({ flatId, host, defHeaders, ...funcions });
+                    defGetParams = { flatId, host, defHeaders, ...funcions };
+                    validFlatId = await getConfig(defGetParams);
                 }
 
                 if (is(validFlatId)) {
                     console.log(validFlatId);
                 }
 
-                if (is(cookies, 700)) {
+                if (is(validFlatId)) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
@@ -101,8 +104,8 @@ module.exports = function (RED) {
                             out ??= await getPayments({ ...defVars });
                             break;
                         case "counters":
-                            let { counters } = await getCounters({ ...defVars });
-                            out ??= counters;
+                            // let { counters } = await getCounters({ ...defVars });
+                            out ??= await getCountersNew(defGetParams);
                             break;
                     }
 
