@@ -3,6 +3,7 @@ const getAccruals = require("../lib/getAccruals");
 const getCookies = require("../lib/getCookies");
 const getCounters = require("../lib/getCounters");
 const getPayments = require("../lib/getPayments");
+const getToken = require("../lib/getToken");
 const sleep = require('util').promisify(setTimeout);
 
 const { is, func } = require("../lib/utils");
@@ -17,6 +18,8 @@ module.exports = function (RED) {
 
         let username = this.login_node.username;
         let password = this.login_node.password;
+        let uk = this.login_node.uk;
+        let token = this.login_node.token;
         let cookies = this.login_node.cookies;
         let is_debug = this.login_node.debug;
         let command = config.command_type;
@@ -50,6 +53,10 @@ module.exports = function (RED) {
 
                 if (!is(cookies, 700)) {
                     cookies = await getCookies({ username, password, ...funcions });
+                }
+
+                if (!is(token, 30)) {
+                    token = await getToken({ username, password, uk, ...funcions });
                 }
 
                 if (is(cookies, 700)) {
