@@ -1,9 +1,9 @@
 [
     {
-        "id": "4e3b76223229328f",
+        "id": "ba9904cac9d24df9",
         "type": "inject",
-        "z": "850a7f41f148bf55",
-        "name": "Триггер",
+        "z": "7b4e77223c4d1b88",
+        "name": "",
         "props": [
             {
                 "p": "payload"
@@ -16,19 +16,19 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 290,
-        "y": 520,
+        "x": 320,
+        "y": 380,
         "wires": [
             [
-                "edcee4fedbd9e6dd"
+                "82fca8f5b7e4fcdd"
             ]
         ]
     },
     {
-        "id": "e0e99c28964b261b",
+        "id": "c66d07cfe7f7c494",
         "type": "debug",
-        "z": "850a7f41f148bf55",
-        "name": "Log",
+        "z": "7b4e77223c4d1b88",
+        "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -37,32 +37,36 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 650,
-        "y": 520,
+        "x": 830,
+        "y": 380,
         "wires": []
     },
     {
-        "id": "edcee4fedbd9e6dd",
+        "id": "82fca8f5b7e4fcdd",
         "type": "ecvida-get",
-        "z": "850a7f41f148bf55",
+        "z": "7b4e77223c4d1b88",
         "name": "",
-        "login": "699fbe81095a69f0",
-        "command_type": "counters",
-        "x": 480,
-        "y": 520,
+        "login": "e2131b5efea640f5",
+        "command_type": "payments",
+        "calendar": "03.2022",
+        "lastMonth": true,
+        "x": 580,
+        "y": 380,
         "wires": [
             [
-                "e0e99c28964b261b"
+                "c66d07cfe7f7c494"
             ]
         ]
     },
     {
-        "id": "699fbe81095a69f0",
+        "id": "e2131b5efea640f5",
         "type": "ecvida-login",
-        "name": "Ecvida",
+        "name": "",
+        "uk": null,
         "username": null,
         "password": null,
-        "cookies": null,
-        "debug": true
+        "token": null,
+        "flatId": null,
+        "debug": false
     }
 ]

@@ -13,6 +13,7 @@
     },
     "keywords": [
         "node-red",
+        "WellSoft",
         "ecvida"
     ],
     "bugs": {
@@ -23,8 +24,8 @@
         "type": "git",
         "url": "git+https://github.com/ksrt12/node-red-contrib-ecvida.git"
     },
-    "version": "1.0.10",
-    "description": "ecvida system",
+    "version": "2.0.0",
+    "description": "ecvida system (WellSoft.Pro)",
     "main": "./nodes/ecvida-get.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"

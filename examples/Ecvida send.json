@@ -1,9 +1,23 @@
 [
     {
-        "id": "4e3b76223229328f",
+        "id": "bede313ba516d526",
+        "type": "ecvida-send",
+        "z": "7b4e77223c4d1b88",
+        "name": "",
+        "login": "e2131b5efea640f5",
+        "x": 590,
+        "y": 540,
+        "wires": [
+            [
+                "ab1416278b430347"
+            ]
+        ]
+    },
+    {
+        "id": "16106f09dd57b374",
         "type": "inject",
-        "z": "850a7f41f148bf55",
-        "name": "Триггер",
+        "z": "7b4e77223c4d1b88",
+        "name": "",
         "props": [
             {
                 "p": "payload"
@@ -14,73 +28,41 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 290,
-        "y": 520,
+        "payload": "{\"46809282\":[37.2],\"190211525\":[86.4],\"997283518-0000002339521329164\":[665.3],\"112538-0000001133727873128\":[23572.2,11533.6],\"1015089966504\":[164.1]}",
+        "payloadType": "json",
+        "x": 340,
+        "y": 540,
         "wires": [
             [
-                "b8a4a86e0c1b8ec4"
+                "bede313ba516d526"
             ]
         ]
     },
     {
-        "id": "e0e99c28964b261b",
+        "id": "ab1416278b430347",
         "type": "debug",
-        "z": "850a7f41f148bf55",
-        "name": "Log",
+        "z": "7b4e77223c4d1b88",
+        "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
         "x": 830,
-        "y": 520,
+        "y": 540,
         "wires": []
     },
     {
-        "id": "b8a4a86e0c1b8ec4",
-        "type": "function",
-        "z": "850a7f41f148bf55",
-        "name": "Показания",
-        "func": "msg.payload = {\n    \"46809282\": [\n        36.98\n    ], // ГВС Кухня\n    \"190211525\": [\n        86.4\n    ], // ГВС Ванная\n    \"997283518-0000002339521329164\": [\n        665.2\n    ], // ХВС Ванная\n    \"112538-0000001133727873128\": [\n        23571,\n        11532\n    ], //\n    \"1015089966504\": [\n        164.3\n    ] // ХВС Кухня\n}\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 450,
-        "y": 520,
-        "wires": [
-            [
-                "ebb9d99513973b2c"
-            ]
-        ]
-    },
-    {
-        "id": "ebb9d99513973b2c",
-        "type": "ecvida-send",
-        "z": "850a7f41f148bf55",
-        "name": "",
-        "login": "699fbe81095a69f0",
-        "x": 650,
-        "y": 520,
-        "wires": [
-            [
-                "e0e99c28964b261b"
-            ]
-        ]
-    },
-    {
-        "id": "699fbe81095a69f0",
+        "id": "e2131b5efea640f5",
         "type": "ecvida-login",
-        "name": "Ecvida",
+        "name": "",
+        "uk": null,
         "username": null,
         "password": null,
-        "cookies": null,
-        "debug": true
+        "token": null,
+        "flatId": null,
+        "debug": false
     }
 ]
