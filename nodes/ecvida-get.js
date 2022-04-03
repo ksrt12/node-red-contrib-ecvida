@@ -35,7 +35,7 @@ module.exports = function (RED) {
         /** @type {string} */
         let date = config.calendar;
         /** @type {boolean} */
-        let getAll = config.get_all;
+        let lastMonth = config.lastMonth;
 
         let node = this;
 
@@ -103,14 +103,12 @@ module.exports = function (RED) {
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
 
-                    let defVars = { topic, SetError, date };
-
                     switch (command) {
                         case "accruals":
-                            out ??= await getAccruals({ ...defVars, getAll });
+                            out ??= await getAccruals({ ...defGetParams, date, lastMonth });
                             break;
                         case "payments":
-                            out ??= await getPayments({ ...defGetParams, date });
+                            out ??= await getPayments({ ...defGetParams, date, lastMonth });
                             break;
                         case "counters":
                             // let { counters } = await getCounters({ ...defVars });

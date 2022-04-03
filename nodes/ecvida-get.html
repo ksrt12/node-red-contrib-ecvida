@@ -20,9 +20,9 @@
         <label for="node-input-calendar"> Месяц и год</label>
         <input type="text" id="node-input-calendar" placeholder="03.2022">
     </div>
-    <div class="form-row node-input-get_all">
-        <label for="node-input-get_all"> Получить все значения</label>
-        <input type="checkbox" id="node-input-get_all" style="display: inline-block; width: auto; vertical-align: top;">
+    <div class="form-row node-input-lastMonth">
+        <label for="node-input-lastMonth"> Только за последний месяц</label>
+        <input type="checkbox" id="node-input-lastMonth" style="display: inline-block; width: auto; vertical-align: top;">
     </div>
 </script>
 
@@ -112,7 +112,7 @@
             login: { type: "ecvida-login", required: true },
             command_type: { value: "counters" },
             calendar: { value: null, required: false },
-            get_all: { value: false }
+            lastMonth: { value: true }
         },
         inputs: 1,
         outputs: 1,
