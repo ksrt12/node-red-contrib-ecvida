@@ -110,7 +110,7 @@ module.exports = function (RED) {
                             out ??= await getAccruals({ ...defVars, getAll });
                             break;
                         case "payments":
-                            out ??= await getPayments({ ...defVars });
+                            out ??= await getPayments({ ...defGetParams, date });
                             break;
                         case "counters":
                             // let { counters } = await getCounters({ ...defVars });
