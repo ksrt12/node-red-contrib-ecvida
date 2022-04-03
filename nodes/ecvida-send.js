@@ -1,9 +1,8 @@
 "use strict";
 const getConfig = require("../lib/getConfig");
-const getHost = require("../lib/getHost");
 const getToken = require("../lib/getToken");
 const sendCounters = require("../lib/sendCounters");
-const { is, func } = require("../lib/utils");
+const { is, func, getHost, getBundle } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (RED) {
@@ -56,7 +55,7 @@ module.exports = function (RED) {
                     let defHeaders = {
                         "Version": 4,
                         "OS": "Android",
-                        "bundleID": (uk === "pro.wellsoft.smartzhk") ? uk : "com.wellsoft." + uk,
+                        "bundleID": getBundle(uk),
                         "device": "xiaomi mido",
                         "OSdata": "Android 24",
                         "User-Agent": "okhttp/4.9.0",
