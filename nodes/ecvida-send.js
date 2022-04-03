@@ -1,8 +1,8 @@
 "use strict";
-const getConfig = require("../lib/getConfig");
-const getToken = require("../lib/getToken");
+
+const initCheck = require("../lib/initCheck");
 const sendCounters = require("../lib/sendCounters");
-const { is, func, getHost, getBundle } = require("../lib/utils");
+const { is, func } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (RED) {
@@ -50,34 +50,7 @@ module.exports = function (RED) {
 
                 if (typeof news === "object") {
 
-                    const host = getHost(uk);
-                    let validFlatId = "";
-                    let defHeaders = {
-                        "Version": 4,
-                        "OS": "Android",
-                        "bundleID": getBundle(uk),
-                        "device": "xiaomi mido",
-                        "OSdata": "Android 24",
-                        "User-Agent": "okhttp/4.9.0",
-                    };
-
-                    if (!is(token, 30)) {
-                        token = await getToken({ username, password, defHeaders, host, ...defFunctions });
-                    }
-
-                    /**
-                     * @param {string} flatId Flat ID
-                     * @param {string} host Host
-                     * @param {object} defHeaders {@link defHeaders}
-                     * @param {object} defFuctions {@link defFunctions}
-                     */
-                    let defGetParams = {};
-                    if (is(token, 30)) {
-                        defHeaders["Authorization"] = "Bearer " + token;
-                        defHeaders["Content-Type"] = "application/json; charset=utf-8";
-                        defGetParams = { flatId, host, defHeaders, ...defFunctions };
-                        validFlatId = await getConfig(defGetParams);
-                    }
+                    let { validFlatId, defGetParams } = await initCheck(uk, token, flatId, username, password, defFunctions);
 
                     if (is(validFlatId)) {
 
