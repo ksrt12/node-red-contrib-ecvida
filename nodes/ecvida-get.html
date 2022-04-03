@@ -127,19 +127,19 @@
             $("#node-input-command_type").on("change", function () {
                 if ($(this).val() === "payload") {
                     $(".node-input-calendar").hide();
-                    $(".node-input-get_all").hide();
+                    $(".node-input-lastMonth").hide();
                 } else {
                     $(".node-input-calendar").show();
-                    if ($(this).val() === "accruals") {
-                        $(".node-input-get_all").show();
+                    if ($(this).val() !== "counters") {
+                        $(".node-input-lastMonth").show();
                     } else {
-                        $("#node-input-calendar").prop("disabled", false);
-                        $(".node-input-get_all").hide();
-                        $("#node-input-get_all").prop("checked", false);
+                        $(".node-input-calendar").hide();
+                        $(".node-input-lastMonth").hide();
+                        $("#node-input-lastMonth").prop("checked", false);
                     }
                 }
             });
-            $("#node-input-get_all").on("change", function () {
+            $("#node-input-lastMonth").on("change", function () {
                 $("#node-input-calendar").prop("disabled", $(this).prop('checked'));
             });
         },
