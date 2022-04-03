@@ -73,6 +73,8 @@ module.exports = function (RED) {
                     SetStatus("blue", "ring", topic, "begin");
                     let out;
 
+                    defGetParams.topic = topic;
+
                     switch (command) {
                         case "accruals":
                             out ??= await getAccruals({ ...defGetParams, date, lastMonth });
