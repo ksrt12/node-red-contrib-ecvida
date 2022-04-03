@@ -67,7 +67,7 @@ module.exports = function (RED) {
 
                 let defGetParams = await initCheck(uk, token, flatId, username, password, defFunctions);
 
-                if (is(defGetParams.flatId)) {
+                if (defGetParams && is(defGetParams.flatId)) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");

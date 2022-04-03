@@ -52,7 +52,7 @@ module.exports = function (RED) {
 
                     let defGetParams = await initCheck(uk, token, flatId, username, password, defFunctions);
 
-                    if (is(defGetParams.flatId)) {
+                    if (defGetParams && is(defGetParams.flatId)) {
                         msg.payload = await sendCounters({ news, ...defGetParams });
                     }
                 } else {

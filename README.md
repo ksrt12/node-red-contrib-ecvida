@@ -58,6 +58,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.2 03/04/22
+
+-   Fix node status
+
 Version 2.0.1 03/04/22
 
 -   Fix missing flatID
