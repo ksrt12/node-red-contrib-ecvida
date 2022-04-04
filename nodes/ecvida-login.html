@@ -63,8 +63,8 @@
         <input type="text" id="node-config-input-flatId" placeholder="xxxxxx">
     </div>
     <div class="form-row">
-        <label for='node-config-input-debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
-        <input type="checkbox" id="node-config-input-debug"
+        <label for='node-config-input-is_debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
+        <input type="checkbox" id="node-config-input-is_debug"
             style="display: inline-block; width: auto; vertical-align: top;"></input>
     </div>
     <br>
@@ -81,7 +81,7 @@
             password: { value: null, required: true },
             token: { value: "", required: false },
             flatId: { value: "", required: false },
-            debug: { value: false }
+            is_debug: { value: false }
         },
         label: function () {
             return this.name || this.uk;

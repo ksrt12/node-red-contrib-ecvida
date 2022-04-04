@@ -1,8 +1,8 @@
 "use strict";
 
-module.exports = function (RED) {
+module.exports = function (/** @type {RED} */ RED) {
 
-    function Ecvida_Config_Node(config) {
+    function Ecvida_Config_Node(/** @type {NodeConfig} */ config) {
         RED.nodes.createNode(this, config);
 
         this.uk = config.uk;
@@ -10,9 +10,10 @@ module.exports = function (RED) {
         this.password = config.password;
         this.token = config.token;
         this.flatId = config.flatId;
-        this.debug = config.debug;
+        this.is_debug = config.is_debug;
 
         this.closing = false;
+        /** @type {RedNode} */
         let node = this;
 
         node.on("close", function (done) {

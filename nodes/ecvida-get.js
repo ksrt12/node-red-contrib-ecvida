@@ -7,12 +7,14 @@ const getPayments = require("../lib/getPayments");
 const { is, func } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
-module.exports = function (RED) {
+module.exports = function (/** @type {RED} */ RED) {
 
-    function Ecvida_Get(config) {
+    function Ecvida_Get(/** @type {NodeConfig} */ config) {
         RED.nodes.createNode(this, config);
 
+        /** @type {string} */
         this.login = config.login;
+        /** @type {RedNode} */
         this.login_node = RED.nodes.getNode(this.login);
 
         /** @type {string} */
@@ -26,7 +28,7 @@ module.exports = function (RED) {
         /** @type {string} */
         let flatId = this.login_node.flatId;
         /** @type {boolean} */
-        let is_debug = this.login_node.debug;
+        let is_debug = this.login_node.is_debug;
         /** @type {string} */
         let command = config.command_type;
         /** @type {string} */
@@ -34,19 +36,19 @@ module.exports = function (RED) {
         /** @type {boolean} */
         let lastMonth = config.lastMonth;
 
+        /** @type {RedNode} */
         let node = this;
 
         // Define local functions
-        /** @param {string} msg_text Message text */
+        /** @type {FuncLog} */
         const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
+        /** @type {FuncSetStatus} */
         const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
+        /** @type {FuncSetError} */
         const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
-        /**
-         * @param {Function} Debug_Log Send to debug log
-         * @param {Function} SetStatus Set node status
-         * @param {Function} SetError Set node error status
-         */
+        /** @type {defFunc} */
         const defFunctions = { Debug_Log, SetStatus, SetError };
+        /** @type {FuncClean} */
         const cleanStatus = () => func.CleanStatus(node);
 
         node.on('input', function (msg) {
@@ -71,18 +73,24 @@ module.exports = function (RED) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
+                    /** @type {out} */
                     let out;
 
                     defGetParams.topic = topic;
+                    defGetParams.date = date;
+                    defGetParams.lastMonth = lastMonth;
 
                     switch (command) {
                         case "accruals":
-                            out ??= await getAccruals({ ...defGetParams, date, lastMonth });
+                            /** @type {accruals} */
+                            out ??= await getAccruals(defGetParams);
                             break;
                         case "payments":
-                            out ??= await getPayments({ ...defGetParams, date, lastMonth });
+                            /** @type {payments} */
+                            out ??= await getPayments(defGetParams);
                             break;
                         case "counters":
+                            /** @type {counters} */
                             out ??= await getCounters(defGetParams);
                             break;
                     }

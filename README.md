@@ -58,6 +58,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.3 05/04/22
+
+-   Write types declarations
+
 Version 2.0.2 03/04/22
 
 -   Fix node status
