@@ -73,7 +73,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
-                    /** @type {out} */
+                    /** @type {accruals | payments | counters | undefined | null} */
                     let out;
 
                     defGetParams.topic = topic;
