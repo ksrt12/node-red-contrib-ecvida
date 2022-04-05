@@ -9,7 +9,7 @@ interface RED extends NodeAPI { }
 type NodeDef = import("node-red").NodeDef;
 interface NodeConfig extends NodeDef { }
 
-type Headers = import("node-fetch").Headers;
+type Headers_ = import("node-fetch").Headers;
 type Response_ = import("node-fetch").Response;
 interface Response extends Response_ { }
 
@@ -29,7 +29,7 @@ type defFunc = {
     SetError: FuncSetError;
 };
 
-interface defHeaders extends Headers {
+interface defHeaders extends Headers_ {
     Version: number;
     OS: string;
     bundleID: string;
@@ -214,27 +214,36 @@ interface fetchPostParams extends fetchGetParams {
     body: Body;
 }
 
-type fetchGet = ({ topic, url, headers, SetError }: fetchGetParams) => Promise<ansConfig | ansAccruals | ansPayments | ansCounters>;
-type fetchPost = ({ topic, url, headers, SetError, body }: fetchPostParams) => Promise<ansAuthLogin | ansAuthPasswd | ansSendCounters>;
+type arrowPromise<I, O> = (Params: I) => Promise<O> | undefined;
 
-type initCheck = (uk: string, token: string, flatId: string, username: string, password: string, defFunctions: defFunc) => Promise<defParams> | undefined;
+type fetchGet = arrowPromise<fetchGetParams, ansConfig | ansAccruals | ansPayments | ansCounters>;
+type fetchPost = arrowPromise<fetchPostParams, ansAuthLogin | ansAuthPasswd | ansSendCounters>;
+
+interface initCheckParams {
+    uk: string;
+    token: string;
+    flatId: string;
+    username: string;
+    password: string;
+    defFunctions: defFunc;
+}
+type initCheck = arrowPromise<initCheckParams, defParams>;
 
 interface getTokenParams extends defGetParams {
     username: string;
     password: string;
 }
-type getToken = ({ username, password, defHeaders, host, SetStatus, SetError, Debug_Log }: getTokenParams) => Promise<string> | undefined;
+type getToken = arrowPromise<getTokenParams, string>;
 
 interface getConfigParams extends defGetParams {
     flatId: string;
 }
-type getConfig = ({ flatId, host, defHeaders, SetStatus, SetError, Debug_Log }: getConfigParams) => Promise<string> | undefined;
+type getConfig = arrowPromise<getConfigParams, string>;
 
 interface getAccrOrPay extends getConfigParams {
     lastMonth: boolean;
     date: string;
 }
-type getAccrOrPayFunc<T> = ({ lastMonth, date, flatId, defHeaders, host, topic, SetError, Debug_Log }: getAccrOrPay) => Promise<T> | undefined;
 
 type onlyLast = {
     month: string;
@@ -246,10 +255,10 @@ type accrualsAll = {
     };
 };
 type accruals = accrualsAll | onlyLast;
-type getAccruals = getAccrOrPayFunc<accruals>;
+type getAccruals = arrowPromise<getAccrOrPay, accruals>;
 
 type payments = accruals | { [key: string]: number; };
-type getPayments = getAccrOrPayFunc<payments>;
+type getPayments = arrowPromise<getAccrOrPay, payments>;
 
 type counters = {
     [key: string]: {
@@ -259,8 +268,8 @@ type counters = {
         error: string | null;
     };
 };
-type getCounters = ({ flatId, defHeaders, host, topic, SetError, Debug_Log }: getConfigParams) => Promise<counters> | undefined;
+type getCounters = arrowPromise<getConfigParams, counters>;
 
 type news = { [key: string]: number[]; };
 interface sendCountersParams extends getConfigParams { news: news; }
-type sendCounters = ({ news, flatId, defHeaders, host, SetStatus, SetError, Debug_Log }: sendCountersParams) => Promise<string> | undefined;
+type sendCounters = arrowPromise<sendCountersParams, string>;

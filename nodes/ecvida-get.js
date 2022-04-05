@@ -67,7 +67,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 cleanStatus();
 
-                let defGetParams = await initCheck(uk, token, flatId, username, password, defFunctions);
+                let defGetParams = await initCheck({ uk, token, flatId, username, password, defFunctions });
 
                 if (defGetParams && is(defGetParams.flatId)) {
 

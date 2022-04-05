@@ -58,6 +58,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.4 05/04/22
+
+-   Add types declarations for WellSoft API
+-   Simplify index.d.ts (use generic types)
+
 Version 2.0.3 05/04/22
 
 -   Write types declarations

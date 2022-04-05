@@ -54,7 +54,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 if (typeof news === "object") {
 
-                    let defGetParams = await initCheck(uk, token, flatId, username, password, defFunctions);
+                    let defGetParams = await initCheck({ uk, token, flatId, username, password, defFunctions });
 
                     if (defGetParams && is(defGetParams.flatId)) {
                         msg.payload = await sendCounters({ news, ...defGetParams });
