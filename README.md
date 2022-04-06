@@ -58,6 +58,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.7 07/04/22
+
+-   Isolate context for different login
+-   Call CheckContext on every node input event
+
 Version 2.0.6 07/04/22
 
 -   Add getBalance entrie

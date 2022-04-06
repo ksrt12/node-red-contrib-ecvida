@@ -42,9 +42,10 @@ module.exports = function (/** @type {RED} */ RED) {
         const defFunctions = { Debug_Log, SetStatus, SetError };
         /** @type {FuncClean} */
         const cleanStatus = () => func.CleanStatus(node);
-        const should_update = func.CheckContext(node, { flatId, token });
 
         node.on('input', function (msg) {
+
+            const should_update = func.CheckContext(node, { flatId, token });
 
             async function make_action() {
 
