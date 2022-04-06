@@ -58,6 +58,13 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.6 07/04/22
+
+-   Add getBalance entrie
+-   Save previous state to flow context
+-   Change flatId type to Number
+-   Import NodeStatusFill and NodeStatusShape types
+
 Version 2.0.5 06/04/22
 
 -   Fix getToken
