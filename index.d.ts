@@ -225,6 +225,7 @@ interface initCheckParams {
     flatId: string;
     username: string;
     password: string;
+    should_update: boolean;
     defFunctions: defFunc;
 }
 type initCheck = arrowPromise<initCheckParams, defParams>;

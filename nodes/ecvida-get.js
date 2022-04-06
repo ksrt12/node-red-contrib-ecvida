@@ -38,6 +38,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
         /** @type {RedNode} */
         let node = this;
+        node.previous = { flatId: "" };
 
         // Define local functions
         /** @type {FuncLog} */
@@ -53,6 +54,12 @@ module.exports = function (/** @type {RED} */ RED) {
 
         node.on('input', function (msg) {
 
+            let should_update = false;
+            if (flatId !== node.previous.flatId) {
+                node.previous.flatId = flatId;
+                should_update = true;
+            }
+
             let payload = msg.payload;
             if (command === "payload") {
                 if (typeof payload === "object") {
@@ -67,7 +74,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 cleanStatus();
 
-                let defGetParams = await initCheck({ uk, token, flatId, username, password, defFunctions });
+                let defGetParams = await initCheck({ should_update, uk, token, flatId, username, password, defFunctions });
 
                 if (defGetParams && is(defGetParams.flatId)) {
 
@@ -113,4 +120,4 @@ module.exports = function (/** @type {RED} */ RED) {
     };
 
     RED.nodes.registerType("ecvida-get", Ecvida_Get);
-};;
+};

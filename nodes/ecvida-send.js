@@ -30,6 +30,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
         /** @type {RedNode} */
         let node = this;
+        node.previous = { flatId: "" };
 
         // Define local functions
         /** @type {FuncLog} */
@@ -47,6 +48,12 @@ module.exports = function (/** @type {RED} */ RED) {
 
             async function make_action() {
 
+                let should_update = false;
+                if (flatId !== node.previous.flatId) {
+                    node.previous.flatId = flatId;
+                    should_update = true;
+                }
+
                 cleanStatus();
                 /** @type {news} */
                 let news = msg.payload;
@@ -54,7 +61,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 if (typeof news === "object") {
 
-                    let defGetParams = await initCheck({ uk, token, flatId, username, password, defFunctions });
+                    let defGetParams = await initCheck({ should_update, uk, token, flatId, username, password, defFunctions });
 
                     if (defGetParams && is(defGetParams.flatId)) {
                         msg.payload = await sendCounters({ news, ...defGetParams });

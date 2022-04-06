@@ -58,6 +58,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.5 06/04/22
+
+-   Fix getToken
+-   Call getConfig only if flatId is changed
+
 Version 2.0.4 05/04/22
 
 -   Add types declarations for WellSoft API
