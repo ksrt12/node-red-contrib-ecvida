@@ -13,6 +13,9 @@ type Headers_ = import("node-fetch").Headers;
 type Response_ = import("node-fetch").Response;
 interface Response extends Response_ { }
 
+type NodeContextData_ = import("node-red").NodeContextData;
+interface NodeContextData extends NodeContextData_ { }
+
 type NodeLog = (node: RedNode, msg_text: string) => void;
 type NodeSetStatus = (node: RedNode, is_debug: boolean, color: string, shape: string, topic: string, status: string) => void;
 type NodeSetError = (node: RedNode, is_debug: boolean, topic: string, status: string) => void;
@@ -41,7 +44,7 @@ interface defHeaders extends Headers_ {
 }
 
 interface defParams {
-    flatId: string;
+    flatId: number;
     host: string;
     defHeaders: defHeaders;
     defFunctions: defFunc;
@@ -222,7 +225,7 @@ type fetchPost = arrowPromise<fetchPostParams, ansAuthLogin | ansAuthPasswd | an
 interface initCheckParams {
     uk: string;
     token: string;
-    flatId: string;
+    flatId: number;
     username: string;
     password: string;
     should_update: boolean;
@@ -237,9 +240,16 @@ interface getTokenParams extends defGetParams {
 type getToken = arrowPromise<getTokenParams, string>;
 
 interface getConfigParams extends defGetParams {
-    flatId: string;
+    flatId: number;
+    isBalance?: boolean;
 }
-type getConfig = arrowPromise<getConfigParams, string>;
+interface flatObj {
+    id: number;
+    adress: string;
+    balance: number;
+}
+type getConfigAns = flatObj | string;
+type getConfig = arrowPromise<getConfigParams, getConfigAns>;
 
 interface getAccrOrPay extends getConfigParams {
     lastMonth: boolean;

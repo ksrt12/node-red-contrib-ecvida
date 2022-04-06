@@ -60,7 +60,7 @@
     </div>
     <div class="form-row">
         <label for="node-config-input-flatId"><i class="fa fa-cogs"></i> ID Квартиры</label>
-        <input type="text" id="node-config-input-flatId" placeholder="xxxxxx">
+        <input type="number" id="node-config-input-flatId" placeholder="xxxxxx">
     </div>
     <div class="form-row">
         <label for='node-config-input-is_debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
@@ -80,7 +80,7 @@
             username: { value: null, required: true },
             password: { value: null, required: true },
             token: { value: "", required: false },
-            flatId: { value: "", required: false },
+            flatId: { value: null, required: false, validate: RED.validators.number() },
             is_debug: { value: false }
         },
         label: function () {

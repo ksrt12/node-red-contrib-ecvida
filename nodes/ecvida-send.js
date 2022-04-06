@@ -23,8 +23,8 @@ module.exports = function (/** @type {RED} */ RED) {
         let uk = this.login_node.uk;
         /** @type {string} */
         let token = this.login_node.token;
-        /** @type {string} */
-        let flatId = this.login_node.flatId;
+        /** @type {number} */
+        let flatId = Number(this.login_node.flatId);
         /** @type {boolean} */
         let is_debug = this.login_node.is_debug;
 
@@ -63,7 +63,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                     let defGetParams = await initCheck({ should_update, uk, token, flatId, username, password, defFunctions });
 
-                    if (defGetParams && is(defGetParams.flatId)) {
+                    if (defGetParams && defGetParams.flatId) {
                         msg.payload = await sendCounters({ news, ...defGetParams });
                     }
                 } else {

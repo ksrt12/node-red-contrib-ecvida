@@ -10,6 +10,7 @@
     <div class="form-row">
         <label for="node-input-command_type"><i class="icon-tag"></i> Получить</label>
         <select id="node-input-command_type">
+            <option value="balance">Баланс</option>
             <option value="accruals">Начисления</option>
             <option value="payments">Оплаты</option>
             <option value="counters">Счётчики</option>
@@ -123,12 +124,13 @@
         oneditprepare: function () {
             let node = this;
             $("#node-input-command_type").on("change", function () {
-                if ($(this).val() === "payload") {
+                const val = $(this).val();
+                if (val === "payload" || val === "balance") {
                     $(".node-input-calendar").hide();
                     $(".node-input-lastMonth").hide();
                 } else {
                     $(".node-input-calendar").show();
-                    if ($(this).val() !== "counters") {
+                    if (val !== "counters") {
                         $(".node-input-lastMonth").show();
                     } else {
                         $(".node-input-calendar").hide();

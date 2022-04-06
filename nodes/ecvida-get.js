@@ -1,10 +1,11 @@
 "use strict";
 
 const initCheck = require("../lib/initCheck");
+const getConfig = require("../lib/getConfig");
 const getAccruals = require("../lib/getAccruals");
 const getCounters = require("../lib/getCounters");
 const getPayments = require("../lib/getPayments");
-const { is, func } = require("../lib/utils");
+const { func } = require("../lib/utils");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (/** @type {RED} */ RED) {
@@ -25,8 +26,8 @@ module.exports = function (/** @type {RED} */ RED) {
         let uk = this.login_node.uk;
         /** @type {string} */
         let token = this.login_node.token;
-        /** @type {string} */
-        let flatId = this.login_node.flatId;
+        /** @type {number} */
+        let flatId = Number(this.login_node.flatId);
         /** @type {boolean} */
         let is_debug = this.login_node.is_debug;
         /** @type {string} */
@@ -38,7 +39,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
         /** @type {RedNode} */
         let node = this;
-        node.previous = { flatId: "" };
+        node.previous = { flatId: 0 };
 
         // Define local functions
         /** @type {FuncLog} */
@@ -76,11 +77,11 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 let defGetParams = await initCheck({ should_update, uk, token, flatId, username, password, defFunctions });
 
-                if (defGetParams && is(defGetParams.flatId)) {
+                if (defGetParams && defGetParams.flatId) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
-                    /** @type {accruals | payments | counters | undefined | null} */
+                    /** @type {flatObj | accruals | payments | counters | undefined | null} */
                     let out;
 
                     defGetParams.topic = topic;
@@ -88,6 +89,10 @@ module.exports = function (/** @type {RED} */ RED) {
                     defGetParams.lastMonth = lastMonth;
 
                     switch (command) {
+                        case "balance":
+                            /** @type {flatObj} */
+                            out ??= await getConfig({ isBalance: true, ...defGetParams });
+                            break;
                         case "accruals":
                             /** @type {accruals} */
                             out ??= await getAccruals(defGetParams);
