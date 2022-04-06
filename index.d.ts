@@ -9,6 +9,9 @@ interface RED extends NodeAPI { }
 type NodeDef = import("node-red").NodeDef;
 interface NodeConfig extends NodeDef { }
 
+type NodeStatusFill = import("node-red").NodeStatusFill;
+type NodeStatusShape = import("node-red").NodeStatusShape;
+
 type Headers_ = import("node-fetch").Headers;
 type Response_ = import("node-fetch").Response;
 interface Response extends Response_ { }
@@ -17,12 +20,13 @@ type NodeContextData_ = import("node-red").NodeContextData;
 interface NodeContextData extends NodeContextData_ { }
 
 type NodeLog = (node: RedNode, msg_text: string) => void;
-type NodeSetStatus = (node: RedNode, is_debug: boolean, color: string, shape: string, topic: string, status: string) => void;
+type NodeSetStatus = (node: RedNode, is_debug: boolean, color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => void;
 type NodeSetError = (node: RedNode, is_debug: boolean, topic: string, status: string) => void;
 type NodeClean = (node: RedNode) => void;
+type NodeCheckContext = (node: RedNode, varsToCheck: { [key: string]: string | number; }) => boolean;
 
 type FuncLog = (msg_text: string) => NodeLog;
-type FuncSetStatus = (color: string, shape: string, topic: string, status: string) => NodeSetStatus;
+type FuncSetStatus = (color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => NodeSetStatus;
 type FuncSetError = (topic: string, status: string) => NodeSetError;
 type FuncClean = () => NodeClean;
 
