@@ -16,15 +16,7 @@ module.exports = function (/** @type {RED} */ RED) {
         this.login_node = RED.nodes.getNode(this.login);
 
         /** @type {string} */
-        let username = this.login_node.username;
-        /** @type {string} */
-        let password = this.login_node.password;
-        /** @type {string} */
         let uk = this.login_node.uk;
-        /** @type {string} */
-        let token = this.login_node.token;
-        /** @type {number} */
-        let flatId = Number(this.login_node.flatId);
         /** @type {boolean} */
         let is_debug = this.login_node.is_debug;
 
@@ -45,8 +37,6 @@ module.exports = function (/** @type {RED} */ RED) {
 
         node.on('input', function (msg) {
 
-            const should_update = func.CheckContext(node, { flatId, token });
-
             async function make_action() {
 
                 cleanStatus();
@@ -56,7 +46,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 if (typeof news === "object") {
 
-                    let defGetParams = await initCheck({ should_update, uk, token, flatId, username, password, defFunctions });
+                    let defGetParams = await initCheck({ uk, RED, id: node.login, defFunctions });
 
                     if (defGetParams && defGetParams.flatId) {
                         msg.payload = await sendCounters({ news, ...defGetParams });

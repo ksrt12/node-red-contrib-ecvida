@@ -56,7 +56,7 @@
     </div>
     <div class="form-row">
         <label for="node-config-input-token"><i class="fa fa-cogs"></i> Token</label>
-        <input type="text" id="node-config-input-token" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+        <input type="password" id="node-config-input-token" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" disabled>
     </div>
     <div class="form-row">
         <label for="node-config-input-flatId"><i class="fa fa-cogs"></i> ID Квартиры</label>
@@ -65,7 +65,7 @@
     <div class="form-row">
         <label for='node-config-input-is_debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
         <input type="checkbox" id="node-config-input-is_debug"
-            style="display: inline-block; width: auto; vertical-align: top;"></input>
+            style="display: inline-block; width: auto; vertical-align: top;">
     </div>
     <br>
 
@@ -79,9 +79,15 @@
             uk: { value: null, required: true },
             username: { value: null, required: true },
             password: { value: null, required: true },
-            token: { value: "", required: false },
-            flatId: { value: null, required: false, validate: RED.validators.number() },
+            token: { value: null, required: false },
+            flatId: { value: null, required: false },
             is_debug: { value: false }
+        },
+        credentials: {
+            username: { type: "text" },
+            password: { type: "password" },
+            token: { type: "password" },
+            flatId: { type: "text" }
         },
         label: function () {
             return this.name || this.uk;

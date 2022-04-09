@@ -6,9 +6,6 @@ module.exports = function (/** @type {RED} */ RED) {
         RED.nodes.createNode(this, config);
 
         this.uk = config.uk;
-        this.username = config.username;
-        this.password = config.password;
-        this.token = config.token;
         this.flatId = config.flatId;
         this.is_debug = config.is_debug;
 
@@ -21,6 +18,13 @@ module.exports = function (/** @type {RED} */ RED) {
             done();
         });
     }
-    RED.nodes.registerType('ecvida-login', Ecvida_Config_Node);
+    RED.nodes.registerType('ecvida-login', Ecvida_Config_Node, {
+        credentials: {
+            username: { type: "text" },
+            password: { type: "password" },
+            token: { type: "password" },
+            flatId: { type: "text" }
+        }
+    });
 };
 

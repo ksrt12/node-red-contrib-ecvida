@@ -226,21 +226,23 @@ type arrowPromise<I, O> = (Params: I) => Promise<O> | undefined;
 type fetchGet = arrowPromise<fetchGetParams, ansConfig | ansAccruals | ansPayments | ansCounters>;
 type fetchPost = arrowPromise<fetchPostParams, ansAuthLogin | ansAuthPasswd | ansSendCounters>;
 
-interface initCheckParams {
-    uk: string;
-    token: string;
-    flatId: number;
+interface ecvidaCreds {
     username: string;
     password: string;
+    token?: string;
+    flatId?: number;
+}
+interface initCheckParams {
+    uk: string;
+    RED: RED;
+    id: string;
+    flatId: number;
     should_update: boolean;
     defFunctions: defFunc;
 }
 type initCheck = arrowPromise<initCheckParams, defParams>;
 
-interface getTokenParams extends defGetParams {
-    username: string;
-    password: string;
-}
+interface getTokenParams extends defGetParams, ecvidaCreds { }
 type getToken = arrowPromise<getTokenParams, string>;
 
 interface getConfigParams extends defGetParams {
