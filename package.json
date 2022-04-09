@@ -24,7 +24,7 @@
         "type": "git",
         "url": "git+https://github.com/ksrt12/node-red-contrib-ecvida.git"
     },
-    "version": "2.0.9",
+    "version": "2.0.10",
     "description": "ecvida system (WellSoft.Pro)",
     "main": "",
     "types": "./index.d.ts",

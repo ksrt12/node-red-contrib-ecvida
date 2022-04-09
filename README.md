@@ -58,6 +58,13 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.10 09/04/22
+
+-   Clean project
+-   Drop unneeded CheckContext() function
+-   Update examples
+-   Update Docs
+
 Version 2.0.9 09/04/22
 
 -   Move "uk" var to credentials

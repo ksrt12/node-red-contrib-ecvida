@@ -28,7 +28,7 @@
 </script>
 
 <script type="text/html" data-help-name="ecvida-get">
-    <p>Получить текущие значения счётчиков, начислений или оплат</p>
+    <p>Получить текущие значения счётчиков, начислений, оплат или баланса</p>
 
     <h2>Вход</h2>
     <dl class="message-properties">
@@ -36,11 +36,23 @@
     </dl>
 
     <h2>Выход</h2>
-    
-    <h3>Начисления</h3>
-    <dl class="message-properties">
-        <dt>payload <span class="property-type">JSON object</span></dt>
-        <dd>
+<h3>Баланс</h3>
+<dl class="message-properties">
+<dt>payload <span class="property-type">JSON object</span></dt>
+<dd>
+<pre>
+{
+    id: <i>ID квартиры</i>,
+    adress: <i>Адрес квартиры</i>,
+    balance: <i> Текущий баланс</i>
+}
+</pre>
+</dd>
+</dl>
+<h3>Начисления</h3>
+<dl class="message-properties">
+<dt>payload <span class="property-type">JSON object</span></dt>
+<dd>
 <pre>
 {
     accruals: {

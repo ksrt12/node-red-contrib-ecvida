@@ -1,9 +1,9 @@
 [
     {
-        "id": "ba9904cac9d24df9",
+        "id": "1c8ec3391f122dfe",
         "type": "inject",
-        "z": "7b4e77223c4d1b88",
-        "name": "",
+        "z": "850a7f41f148bf55",
+        "name": "Update manual",
         "props": [
             {
                 "p": "payload"
@@ -16,57 +16,56 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 320,
-        "y": 380,
+        "x": 140,
+        "y": 320,
         "wires": [
             [
-                "82fca8f5b7e4fcdd"
+                "9e645ec3ef580c51"
             ]
         ]
     },
     {
-        "id": "c66d07cfe7f7c494",
+        "id": "9e645ec3ef580c51",
+        "type": "ecvida-get",
+        "z": "850a7f41f148bf55",
+        "name": "",
+        "login": "09a2e7431dce5224",
+        "command_type": "balance",
+        "calendar": "",
+        "lastMonth": false,
+        "x": 320,
+        "y": 320,
+        "wires": [
+            [
+                "2f216c988bb77b8f"
+            ]
+        ]
+    },
+    {
+        "id": "2f216c988bb77b8f",
         "type": "debug",
-        "z": "7b4e77223c4d1b88",
+        "z": "850a7f41f148bf55",
         "name": "",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 830,
-        "y": 380,
+        "x": 490,
+        "y": 320,
         "wires": []
     },
     {
-        "id": "82fca8f5b7e4fcdd",
-        "type": "ecvida-get",
-        "z": "7b4e77223c4d1b88",
-        "name": "",
-        "login": "e2131b5efea640f5",
-        "command_type": "payments",
-        "calendar": "03.2022",
-        "lastMonth": true,
-        "x": 580,
-        "y": 380,
-        "wires": [
-            [
-                "c66d07cfe7f7c494"
-            ]
-        ]
-    },
-    {
-        "id": "e2131b5efea640f5",
+        "id": "09a2e7431dce5224",
         "type": "ecvida-login",
-        "name": "",
-        "uk": null,
+        "name": "Эквида",
+        "uk": "ecvida",
         "username": null,
-        "password": null,
-        "token": null,
+        "password": "__PWRD__",
+        "token": "__PWRD__",
         "flatId": null,
-        "debug": false
+        "is_debug": false
     }
 ]
