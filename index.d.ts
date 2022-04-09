@@ -226,17 +226,19 @@ type arrowPromise<I, O> = (Params: I) => Promise<O> | undefined;
 type fetchGet = arrowPromise<fetchGetParams, ansConfig | ansAccruals | ansPayments | ansCounters>;
 type fetchPost = arrowPromise<fetchPostParams, ansAuthLogin | ansAuthPasswd | ansSendCounters>;
 
-interface ecvidaCreds {
+interface ecvidaCredsBase {
+    uk: string;
     username: string;
     password: string;
+}
+interface ecvidaCredsAdd {
     token?: string;
     flatId?: number;
 }
+interface ecvidaCreds extends ecvidaCredsBase, ecvidaCredsAdd { }
 interface initCheckParams {
-    uk: string;
     RED: RED;
     id: string;
-    flatId: number;
     should_update: boolean;
     defFunctions: defFunc;
 }

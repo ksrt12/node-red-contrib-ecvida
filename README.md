@@ -58,6 +58,10 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.9 09/04/22
+
+-   Move "uk" var to credentials
+
 Version 2.0.8 09/04/22
 
 -   Use credentials for login node

@@ -18,8 +18,6 @@ module.exports = function (/** @type {RED} */ RED) {
         /** @type {RedNode} */
         this.login_node = RED.nodes.getNode(this.login);
 
-        /** @type {string} */
-        let uk = this.login_node.uk;
         /** @type {boolean} */
         let is_debug = this.login_node.is_debug;
         /** @type {string} */
@@ -60,7 +58,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 cleanStatus();
 
-                let defGetParams = await initCheck({ uk, RED, id: node.login, defFunctions });
+                let defGetParams = await initCheck({ RED, id: node.login, defFunctions });
 
                 if (defGetParams && defGetParams.flatId) {
 
@@ -69,9 +67,7 @@ module.exports = function (/** @type {RED} */ RED) {
                     /** @type {flatObj | accruals | payments | counters | undefined | null} */
                     let out;
 
-                    defGetParams.topic = topic;
-                    defGetParams.date = date;
-                    defGetParams.lastMonth = lastMonth;
+                    defGetParams = { ...defGetParams, topic, date, lastMonth };
 
                     switch (command) {
                         case "balance":

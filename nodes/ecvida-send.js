@@ -15,8 +15,6 @@ module.exports = function (/** @type {RED} */ RED) {
         /** @type {RedNode} */
         this.login_node = RED.nodes.getNode(this.login);
 
-        /** @type {string} */
-        let uk = this.login_node.uk;
         /** @type {boolean} */
         let is_debug = this.login_node.is_debug;
 
@@ -46,7 +44,7 @@ module.exports = function (/** @type {RED} */ RED) {
 
                 if (typeof news === "object") {
 
-                    let defGetParams = await initCheck({ uk, RED, id: node.login, defFunctions });
+                    let defGetParams = await initCheck({ RED, id: node.login, defFunctions });
 
                     if (defGetParams && defGetParams.flatId) {
                         msg.payload = await sendCounters({ news, ...defGetParams });
