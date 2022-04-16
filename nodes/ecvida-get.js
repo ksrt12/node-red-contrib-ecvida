@@ -1,11 +1,11 @@
 "use strict";
 
-const initCheck = require("../lib/initCheck");
-const getConfig = require("../lib/getConfig");
-const getAccruals = require("../lib/getAccruals");
-const getCounters = require("../lib/getCounters");
-const getPayments = require("../lib/getPayments");
-const { func } = require("../lib/utils");
+const initCheck = require("../utils/initCheck");
+const getConfig = require("../utils/getConfig");
+const getAccruals = require("../utils/getAccruals");
+const getCounters = require("../utils/getCounters");
+const getPayments = require("../utils/getPayments");
+const { func } = require("../utils/common");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (/** @type {RED} */ RED) {

@@ -1,7 +1,7 @@
 "use strict";
 
 const fetchGet = require("./fetchGet");
-const { makeDate, months } = require("./utils");
+const { makeDate, months } = require("./common");
 
 /** @type {getAccruals} */
 module.exports = async ({ lastMonth, date, flatId, defHeaders, host, topic, SetError, Debug_Log }) => {

@@ -1,8 +1,8 @@
 "use strict";
 
-const initCheck = require("../lib/initCheck");
-const sendCounters = require("../lib/sendCounters");
-const { is, func } = require("../lib/utils");
+const initCheck = require("../utils/initCheck");
+const sendCounters = require("../utils/sendCounters");
+const { is, func } = require("../utils/common");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (/** @type {RED} */ RED) {

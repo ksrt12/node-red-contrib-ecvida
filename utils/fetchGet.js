@@ -1,7 +1,7 @@
 "use strict";
 
 const fetch = require("node-fetch");
-const { checkStatus } = require("./utils");
+const { checkStatus } = require("./common");
 
 /** @type {fetchGet} */
 module.exports = ({ topic, url, headers, SetError }) => fetch(url, { method: "GET", headers, redirect: 'manual' })

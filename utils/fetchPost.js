@@ -1,7 +1,7 @@
 "use strict";
 
 const fetch = require("node-fetch");
-const { checkStatus } = require("./utils");
+const { checkStatus } = require("./common");
 
 /** @type {fetchPost} */
 module.exports = ({ topic, url, headers, SetError, body }) => fetch(url, { method: "POST", headers, body, redirect: 'manual' })

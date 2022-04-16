@@ -2,7 +2,7 @@
 
 const getConfig = require("./getConfig");
 const getToken = require("./getToken");
-const { getHost, getBundle, is } = require("./utils");
+const { getHost, getBundle, is } = require("./common");
 
 /** @type {initCheck} */
 module.exports = async ({ RED, id, defFunctions }) => {

@@ -58,6 +58,11 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.11 16/04/22
+
+-   Drop unneeded devDependencies
+-   Rename lib to utils
+
 Version 2.0.10 09/04/22
 
 -   Clean project

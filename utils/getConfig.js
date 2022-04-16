@@ -4,7 +4,7 @@ const fetchGet = require("./fetchGet");
 
 /** @type {getConfig} */
 module.exports = async ({ isBalance, flatId, host, defHeaders, SetStatus, SetError, Debug_Log }) => {
-    const topic = "Ckeck";
+    const topic = "Check";
 
     if (isBalance) {
         SetStatus = () => { };

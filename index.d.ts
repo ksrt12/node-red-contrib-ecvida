@@ -1,14 +1,8 @@
 //
 
-type RedNode_ = import("node-red").Node;
-interface RedNode extends RedNode_ { }
-
-type NodeAPI = import("node-red").NodeAPI;
-interface RED extends NodeAPI { }
-
-type NodeDef = import("node-red").NodeDef;
-interface NodeConfig extends NodeDef { }
-
+type RedNode = import("node-red").Node;
+type RED = import("node-red").NodeAPI;
+type NodeConfig = import("node-red").NodeDef;
 type NodeStatusFill = import("node-red").NodeStatusFill;
 type NodeStatusShape = import("node-red").NodeStatusShape;
 
@@ -26,11 +20,11 @@ type FuncSetStatus = (color: NodeStatusFill, shape: NodeStatusShape, topic: stri
 type FuncSetError = (topic: string, status: string) => NodeSetError;
 type FuncClean = () => NodeClean;
 
-type defFunc = {
+interface defFunc {
     Debug_Log: FuncLog,
     SetStatus: FuncSetStatus,
     SetError: FuncSetError;
-};
+}
 
 interface defHeaders extends Headers_ {
     Version: number;
