@@ -22,7 +22,7 @@ module.exports = async ({ RED, id, defFunctions }) => {
     };
 
     let { uk, username, password, token, flatId } = currCreds;
-    if (typeof flatId !== "number") {
+    if (flatId && typeof flatId !== "number") {
         flatId = Number(flatId);
     }
 

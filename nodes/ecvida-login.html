@@ -62,11 +62,6 @@
         <label for="node-config-input-flatId"><i class="fa fa-cogs"></i> ID Квартиры</label>
         <input type="number" id="node-config-input-flatId" placeholder="xxxxxx">
     </div>
-    <div class="form-row">
-        <label for='node-config-input-is_debug' class="l-width"><i class='fa fa-share-square'></i> Debug</span></label>
-        <input type="checkbox" id="node-config-input-is_debug"
-            style="display: inline-block; width: auto; vertical-align: top;">
-    </div>
     <br>
 
 </script>
@@ -80,8 +75,7 @@
             username: { value: null, required: true },
             password: { value: null, required: true },
             token: { value: null, required: false },
-            flatId: { value: null, required: false },
-            is_debug: { value: false }
+            flatId: { value: null, required: false }
         },
         credentials: {
             uk: { type: "text" },

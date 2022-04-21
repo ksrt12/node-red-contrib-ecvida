@@ -4,8 +4,8 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
     <div class="form-row">
-        <label for="node-input-login"><i class="icon-tag"></i> Ecvida login</label>
-        <input type="text" id="node-input-login" placeholder="Ecvida login">
+        <label for="node-input-login"><i class="icon-tag"></i> Login</label>
+        <input type="text" id="node-input-login" placeholder="Login">
     </div>
     <div class="form-row">
         <label for="node-input-command_type"><i class="icon-tag"></i> Получить</label>
@@ -25,6 +25,14 @@
         <label for="node-input-lastMonth"> Только за последний месяц</label>
         <input type="checkbox" id="node-input-lastMonth" style="display: inline-block; width: auto; vertical-align: top;">
     </div>
+    <div class="form-row node-input-showArchive">
+        <label for="node-input-showArchive"> Архивные данные</label>
+        <input type="checkbox" id="node-input-showArchive" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
+    <div class="form-row">
+        <label for='node-input-is_debug'> Debug</label>
+        <input type="checkbox" id="node-input-is_debug" style="display: inline-block; width: auto; vertical-align: top;">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="ecvida-get">
@@ -33,6 +41,16 @@
     <h2>Вход</h2>
     <dl class="message-properties">
         <dt>payload <span class="property-type">any | JSON object</span></dt>
+        <dd>
+<pre>
+{
+    command: <i>"payments/balance/counters/accruals"</i>,
+    date: <i>"мм.гггг"/""</i>,
+    lastMonth: <i>true/false</i>,
+    showArchive: <i>true/false</i> // только для command="counters"
+}
+</pre>
+        </dd>
     </dl>
 
     <h2>Выход</h2>
@@ -121,9 +139,11 @@
         defaults: {
             name: { value: null, required: false },
             login: { type: "ecvida-login", required: true },
-            command_type: { value: "counters" },
+            is_debug: { value: false },
+            command_type: { value: "counters", required: true },
             calendar: { value: null, required: false },
-            lastMonth: { value: true }
+            lastMonth: { value: true },
+            showArchive: { value: false }
         },
         inputs: 1,
         outputs: 1,
@@ -140,14 +160,17 @@
                 if (val === "payload" || val === "balance") {
                     $(".node-input-calendar").hide();
                     $(".node-input-lastMonth").hide();
+                    $(".node-input-showArchive").hide();
                 } else {
                     $(".node-input-calendar").show();
                     if (val !== "counters") {
                         $(".node-input-lastMonth").show();
+                        $(".node-input-showArchive").hide();
                     } else {
                         $(".node-input-calendar").hide();
                         $(".node-input-lastMonth").hide();
                         $("#node-input-lastMonth").prop("checked", false);
+                        $(".node-input-showArchive").show();
                     }
                 }
             });

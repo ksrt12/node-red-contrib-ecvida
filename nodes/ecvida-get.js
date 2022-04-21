@@ -18,14 +18,8 @@ module.exports = function (/** @type {RED} */ RED) {
         /** @type {RedNode} */
         this.login_node = RED.nodes.getNode(this.login);
 
-        /** @type {boolean} */
-        let is_debug = this.login_node.is_debug;
-        /** @type {string} */
-        let command = config.command_type;
-        /** @type {string} */
-        let date = config.calendar;
-        /** @type {boolean} */
-        let lastMonth = config.lastMonth;
+        /** @type {GetNodeConfig} */
+        let { is_debug, command_type: command, calendar: date, lastMonth, showArchive } = config;
 
         /** @type {RedNode} */
         let node = this;
@@ -47,7 +41,7 @@ module.exports = function (/** @type {RED} */ RED) {
             let payload = msg.payload;
             if (command === "payload") {
                 if (typeof payload === "object") {
-                    ({ command, date } = payload);
+                    ({ command, date, lastMonth, showArchive } = payload);
                 } else {
                     SetError("Input", "Bad JSON");
                     return;
@@ -84,7 +78,7 @@ module.exports = function (/** @type {RED} */ RED) {
                             break;
                         case "counters":
                             /** @type {counters} */
-                            out ??= await getCounters(defGetParams);
+                            out ??= await getCounters({ showArchive, ...defGetParams });
                             break;
                     }
 

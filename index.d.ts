@@ -10,6 +10,14 @@ type Headers_ = import("node-fetch").Headers;
 type Response_ = import("node-fetch").Response;
 interface Response extends Response_ { }
 
+interface GetNodeConfig extends NodeConfig {
+    is_debug: boolean;
+    command_type: string;
+    calendar: string;
+    lastMonth: boolean;
+    showArchive: boolean;
+}
+
 type NodeLog = (node: RedNode, msg_text: string) => void;
 type NodeSetStatus = (node: RedNode, is_debug: boolean, color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => void;
 type NodeSetError = (node: RedNode, is_debug: boolean, topic: string, status: string) => void;
@@ -269,6 +277,7 @@ type getAccruals = arrowPromise<getAccrOrPay, accruals>;
 type payments = accruals | { [key: string]: number; };
 type getPayments = arrowPromise<getAccrOrPay, payments>;
 
+interface getCountersParams extends getConfigParams { showArchive: boolean; }
 type counters = {
     [key: string]: {
         id: number,
@@ -277,7 +286,7 @@ type counters = {
         error: string | null;
     };
 };
-type getCounters = arrowPromise<getConfigParams, counters>;
+type getCounters = arrowPromise<getCountersParams, counters>;
 
 type news = { [key: string]: number[]; };
 interface sendCountersParams extends getConfigParams { news: news; }

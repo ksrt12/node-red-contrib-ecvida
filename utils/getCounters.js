@@ -3,7 +3,7 @@
 const fetchGet = require("./fetchGet");
 
 /** @type {getCounters} */
-module.exports = async ({ flatId, defHeaders, host, topic, SetError, Debug_Log }) => {
+module.exports = async ({ flatId, showArchive, defHeaders, host, topic, SetError, Debug_Log }) => {
 
     /** @type {ansCounters} */
     let counters_status = await fetchGet({ topic, url: host + "/api/counters/GetList?RoomId=" + flatId, headers: defHeaders, SetError });
@@ -13,7 +13,7 @@ module.exports = async ({ flatId, defHeaders, host, topic, SetError, Debug_Log }
         /** @type {counters} */
         let counters = {};
         counters_status.data.forEach(counter => {
-            if (!counter.isArchive) {
+            if (showArchive || !counter.isArchive) {
                 let serial = counter.serialNumber;
                 if (!counters.hasOwnProperty(serial)) {
                     counters[serial] = {

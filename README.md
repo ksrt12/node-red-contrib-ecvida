@@ -41,7 +41,7 @@
 
 ## Nodes:
 
--   **ecvida-get** Get accruals, payments or counters
+-   **ecvida-get** Get accruals, balance, payments or counters
 -   **ecvida-send** Send counters
 
 ## Installation:
@@ -57,6 +57,12 @@ npm install *full path to cloned repo folder*
 ```
 
 ## Changelog
+
+Version 2.0.12 22/04/22
+
+-   Add checkbox to show archive counters data
+-   Move Debug checkbox to **ecvida-send** node
+-   Update docs for JSON input
 
 Version 2.0.11 16/04/22
 

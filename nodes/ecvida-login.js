@@ -4,9 +4,6 @@ module.exports = function (/** @type {RED} */ RED) {
 
     function Ecvida_Config_Node(/** @type {NodeConfig} */ config) {
         RED.nodes.createNode(this, config);
-
-        this.is_debug = config.is_debug;
-
         this.closing = false;
         /** @type {RedNode} */
         let node = this;
