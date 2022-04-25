@@ -1,6 +1,6 @@
 "use strict";
 
-const fetchGet = require("./fetchGet");
+const fetchGet = require("./myFetch").Get;
 
 /** @type {getConfig} */
 module.exports = async ({ isBalance, flatId, host, defHeaders, SetStatus, SetError, Debug_Log }) => {

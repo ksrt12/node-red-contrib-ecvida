@@ -1,6 +1,6 @@
 "use strict";
 
-const fetchGet = require("./fetchGet");
+const fetchGet = require("./myFetch").Get;
 
 /** @type {getCounters} */
 module.exports = async ({ flatId, showArchive, defHeaders, host, topic, SetError, Debug_Log }) => {

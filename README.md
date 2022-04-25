@@ -44,6 +44,11 @@
 -   **ecvida-get** Get accruals, balance, payments or counters
 -   **ecvida-send** Send counters
 
+## Requirements
+
+-   NodeJS: v16.0+
+-   Node-Red: v2.0.0+
+
 ## Installation:
 
 ```
@@ -57,6 +62,13 @@ npm install *full path to cloned repo folder*
 ```
 
 ## Changelog
+
+Version 2.0.13 25/04/22
+
+-   Drop unneeded headers
+-   Merge fetchGet and fetchPost into single file
+-   Set minimum nodejs version to 16.x
+-   Use built-in fetch API if possible (nodejs 18.x)
 
 Version 2.0.12 22/04/22
 

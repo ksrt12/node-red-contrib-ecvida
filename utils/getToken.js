@@ -1,6 +1,6 @@
 "use strict";
 
-const fetchPost = require("./fetchPost");
+const fetchPost = require("./myFetch").Post;
 
 /** @type {getToken} */
 module.exports = async ({ username, password, defHeaders, host, SetStatus, SetError, Debug_Log }) => {

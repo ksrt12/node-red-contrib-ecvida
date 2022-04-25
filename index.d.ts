@@ -216,13 +216,14 @@ interface fetchGetParams {
     SetError: FuncSetError;
 }
 interface fetchPostParams extends fetchGetParams {
-    body: Body;
+    body?: Body;
 }
 
 type arrowPromise<I, O> = (Params: I) => Promise<O> | undefined;
 
 type fetchGet = arrowPromise<fetchGetParams, ansConfig | ansAccruals | ansPayments | ansCounters>;
 type fetchPost = arrowPromise<fetchPostParams, ansAuthLogin | ansAuthPasswd | ansSendCounters>;
+type myFetch = fetchGet | fetchPost;
 
 interface ecvidaCredsBase {
     uk: string;

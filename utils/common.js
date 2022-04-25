@@ -51,11 +51,6 @@ module.exports = {
     },
 
     /** @type {(uk: string) => string} */
-    getBundle(uk) {
-        return (uk === "smartuk") ? "pro.wellsoft.smartzhk" : "com.wellsoft." + uk;
-    },
-
-    /** @type {(uk: string) => string} */
     getHost(uk) {
         let host = "";
         uk = renameUk[uk] || uk;

@@ -1,6 +1,6 @@
 "use strict";
 
-const fetchGet = require("./fetchGet");
+const fetchGet = require("./myFetch").Get;
 const { makeDate, months } = require("./common");
 
 /** @type {getAccruals} */

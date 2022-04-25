@@ -1,6 +1,6 @@
 "use strict";
 
-const fetchPost = require("./fetchPost");
+const fetchPost = require("./myFetch").Post;
 const getCounters = require("./getCounters");
 
 /** @type {sendCounters} */
