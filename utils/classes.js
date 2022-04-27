@@ -16,7 +16,7 @@ class DefFunc {
             this.SetStatus("red", "dot", topic, "fail: " + status);
             node.send(status);
         };
-        /** @type {() => void} */
+        /** @type {FuncClean} */
         this.cleanStatus = () => node.status({});
     }
 };

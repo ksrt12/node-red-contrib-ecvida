@@ -18,28 +18,22 @@ interface GetNodeConfig extends NodeConfig {
     showArchive: boolean;
 }
 
-type NodeLog = (node: RedNode, msg_text: string) => void;
-type NodeSetStatus = (node: RedNode, is_debug: boolean, color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => void;
-type NodeSetError = (node: RedNode, is_debug: boolean, topic: string, status: string) => void;
-type NodeClean = (node: RedNode) => void;
+type getCommand = "accruals" | "payments" | "counters";
 
-type FuncLog = (msg_text: string) => NodeLog;
-type FuncSetStatus = (color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => NodeSetStatus;
-type FuncSetError = (topic: string, status: string) => NodeSetError;
-type FuncClean = () => NodeClean;
+type FuncLog = (msg_text: string) => void;
+type FuncSetStatus = (color: NodeStatusFill, shape: NodeStatusShape, topic: string, status: string) => void;
+type FuncSetError = (topic: string, status: string) => void;
+type FuncClean = () => void;
 
 interface defFunc {
     Debug_Log: FuncLog,
     SetStatus: FuncSetStatus,
     SetError: FuncSetError;
+    cleanStatus: FuncClean;
 }
 
 interface defHeaders extends Headers_ {
     Version: number;
-    OS: string;
-    bundleID: string;
-    device: string;
-    OSdata: string;
     "User-Agent": string;
     Authorization?: string;
     "Content-Type"?: string;

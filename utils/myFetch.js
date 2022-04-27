@@ -1,6 +1,6 @@
 "use strict";
 
-const localFetch = (process.versions.node >= "18.0.0") ? fetch : require("node-fetch");
+const localFetch = require("node-fetch");
 const { checkStatus } = require("./common");
 
 /** @type {myFetch} */
