@@ -10,31 +10,6 @@ const renameUk = {
 
 module.exports = {
 
-    func: {
-        /** @type {NodeLog} */
-        Debug_Log(node, msg_text) {
-            node.log(msg_text);
-            node.send({ payload: msg_text });
-        },
-
-        /** @type {NodeSetStatus} */
-        SetStatus(node, is_debug, color, shape, topic, status) {
-            const text = topic + ": " + status;
-            node.status({ fill: color, shape, text });
-            if (is_debug) this.Debug_Log(node, text);
-        },
-
-        /** @type {NodeSetError} */
-        SetError(node, is_debug, topic, status = "") {
-            this.SetStatus(node, is_debug, "red", "dot", topic, status + ": fail");
-        },
-
-        /** @type {NodeClean} */
-        CleanStatus(node) {
-            node.status({});
-        }
-    },
-
     /** @type {(req: Response) => Response | Error} */
     checkStatus(req) {
         const status = req.status;

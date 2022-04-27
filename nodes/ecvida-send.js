@@ -2,7 +2,7 @@
 
 const initCheck = require("../utils/initCheck");
 const sendCounters = require("../utils/sendCounters");
-const { is, func } = require("../utils/common");
+const { DefFunc } = require("../utils/classes");
 const sleep = require('util').promisify(setTimeout);
 
 module.exports = function (/** @type {RED} */ RED) {
@@ -22,16 +22,8 @@ module.exports = function (/** @type {RED} */ RED) {
         let node = this;
 
         // Define local functions
-        /** @type {FuncLog} */
-        const Debug_Log = msg_text => func.Debug_Log(node, msg_text);
-        /** @type {FuncSetStatus} */
-        const SetStatus = (color, shape, topic, status) => func.SetStatus(node, is_debug, color, shape, topic, status);
-        /** @type {FuncSetError} */
-        const SetError = (topic, status) => func.SetError(node, is_debug, topic, status);
-        /** @type {defFunc} */
-        const defFunctions = { Debug_Log, SetStatus, SetError };
-        /** @type {FuncClean} */
-        const cleanStatus = () => func.CleanStatus(node);
+        const defFunctions = new DefFunc(node, is_debug);
+        const { cleanStatus } = defFunctions;
 
         node.on('input', function (msg) {
 

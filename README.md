@@ -39,7 +39,7 @@
 -   Цветной бульвар
 -   [Эквида](https://lkabinet.online)
 
-## Nodes:
+## Nodes
 
 -   **ecvida-get** Get accruals, balance, payments or counters
 -   **ecvida-send** Send counters
@@ -49,7 +49,7 @@
 -   NodeJS: v16.0+
 -   Node-Red: v2.0.0+
 
-## Installation:
+## Installation
 
 ```
 npm install node-red-contrib-ecvida
