@@ -3,25 +3,15 @@
 const getConfig = require("./getConfig");
 const getToken = require("./getToken");
 const { getHost, is } = require("./common");
+const { EcvidaCreds } = require("./classes");
+
 
 /** @type {initCheck} */
 module.exports = async ({ RED, id, defFunctions }) => {
 
-    const { Debug_Log } = defFunctions;
-    /** @type {ecvidaCreds} */
-    let currCreds;
+    const creds = new EcvidaCreds(RED, id, defFunctions.Debug_Log);
 
-    /** @type {(id: string) => ecvidaCreds} */
-    const getCredentials = id => RED.nodes.getCredentials(id);
-    currCreds = getCredentials(id);
-
-    /** @type {(newCreds: ecvidaCredsAdd) => void} */
-    const updateCredentials = newCreds => {
-        currCreds = { ...currCreds, ...newCreds };
-        RED.nodes.addCredentials(id, currCreds);
-    };
-
-    let { uk, username, password, token, flatId } = currCreds;
+    let { uk, username, password, token, flatId } = creds.get();
     if (flatId && typeof flatId !== "number") {
         flatId = Number(flatId);
     }
@@ -34,24 +24,19 @@ module.exports = async ({ RED, id, defFunctions }) => {
     if (!is(token, 30)) {
         token = await getToken({ username, password, defHeaders, host, ...defFunctions });
         if (is(token, 30)) {
-            updateCredentials({ token });
-            Debug_Log("Токен получен! Обновите ecivda-login вручную!");
+            creds.update({ token });
         }
     }
-
-    /** @type {defParams} */
-    let defGetParams = {};
 
     if (is(token, 30)) {
         defHeaders["Authorization"] = "Bearer " + token;
         defHeaders["Content-Type"] = "application/json; charset=utf-8";
-        defGetParams = { flatId, host, defHeaders, ...defFunctions };
+        let defGetParams = { flatId, host, defHeaders, ...defFunctions };
 
         if (!flatId) {
             flatId = await getConfig(defGetParams);
             defGetParams.flatId = flatId;
-            updateCredentials({ flatId });
-            Debug_Log("ID квартиры получен! Обновите ecivda-login вручную!");
+            creds.update({ flatId });
         }
 
         return defGetParams;

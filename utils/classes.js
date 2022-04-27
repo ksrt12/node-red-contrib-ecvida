@@ -21,4 +21,20 @@ class DefFunc {
     }
 };
 
-module.exports = { DefFunc };
+class EcvidaCreds {
+    /** @type {(RED: RED, id: string, Debug_Log: FuncLog)} */
+    constructor(RED, id, Debug_Log) {
+        /** @type {() => ecvidaCreds} */
+        this.get = () => RED.nodes.getCredentials(id);
+        /** @type {(newCreds: ecvidaCredsAdd) => void} */
+        this.update = newCreds => {
+            let oldCreds = this.get();
+            RED.nodes.addCredentials(id, { ...oldCreds, ...newCreds });
+            Object.keys(newCreds).forEach(key => {
+                Debug_Log(`Значение ключа ${key} получено. Обновите ecivda-login вручную!`);
+            });
+        };
+    }
+}
+
+module.exports = { DefFunc, EcvidaCreds };
