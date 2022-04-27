@@ -63,6 +63,12 @@ npm install *full path to cloned repo folder*
 
 ## Changelog
 
+Version 2.0.14 28/04/22
+
+-   Rewrite some fnuctions as classes
+-   Clean code
+-   Revert Use built-in fetch API if possible (nodejs 18.x)
+
 Version 2.0.13 25/04/22
 
 -   Drop unneeded headers
