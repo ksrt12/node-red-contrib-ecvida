@@ -1,10 +1,7 @@
 "use strict";
 
 const initCheck = require("../utils/initCheck");
-const getConfig = require("../utils/getConfig");
-const getAccruals = require("../utils/getAccruals");
-const getCounters = require("../utils/getCounters");
-const getPayments = require("../utils/getPayments");
+const getEcvida = require("../utils/getEcvida");
 const { DefFunc } = require("../utils/classes");
 const sleep = require('util').promisify(setTimeout);
 
@@ -50,29 +47,10 @@ module.exports = function (/** @type {RED} */ RED) {
 
                     let topic = "Get " + command;
                     SetStatus("blue", "ring", topic, "begin");
-                    /** @type {flatObj | accruals | payments | counters | undefined | null} */
-                    let out;
-
                     defGetParams = { ...defGetParams, topic, date, lastMonth };
 
-                    switch (command) {
-                        case "balance":
-                            /** @type {flatObj} */
-                            out ??= await getConfig({ isBalance: true, ...defGetParams });
-                            break;
-                        case "accruals":
-                            /** @type {accruals} */
-                            out ??= await getAccruals(defGetParams);
-                            break;
-                        case "payments":
-                            /** @type {payments} */
-                            out ??= await getPayments(defGetParams);
-                            break;
-                        case "counters":
-                            /** @type {counters} */
-                            out ??= await getCounters({ showArchive, ...defGetParams });
-                            break;
-                    }
+                    /** @type {flatObj | accruals | payments | counters | undefined | null} */
+                    let out = await getEcvida[command](defGetParams, showArchive);
 
                     if (out) {
                         SetStatus("blue", "dot", topic, "ok");

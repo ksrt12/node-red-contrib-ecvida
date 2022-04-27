@@ -286,3 +286,10 @@ type getCounters = arrowPromise<getCountersParams, counters>;
 type news = { [key: string]: number[]; };
 interface sendCountersParams extends getConfigParams { news: news; }
 type sendCounters = arrowPromise<sendCountersParams, string>;
+
+interface getEcvida {
+    balance(Params: getConfigParams): getConfig;
+    accruals(Params: getAccrOrPay): getAccruals;
+    payments(Params: getAccrOrPay): getPayments;
+    counters(Params: getCountersParams, showArchive: boolean): getCounters;
+}
